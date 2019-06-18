@@ -1,6 +1,7 @@
-import 'package:example/video_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
+
+import 'video_widget.dart';
 
 class VideoList extends StatelessWidget {
   @override

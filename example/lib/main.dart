@@ -1,6 +1,7 @@
-import 'package:example/my_list.dart';
-import 'package:example/video_list.dart';
 import 'package:flutter/material.dart';
+
+import 'my_list.dart';
+import 'video_list.dart';
 
 void main() => runApp(MyApp());
 
