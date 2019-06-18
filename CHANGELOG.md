@@ -1,3 +1,3 @@
-## [0.0.1] - TODO: Add release date.
+## [0.0.1] - 18th June 2019.
 
-* TODO: Describe initial release.
+A Flutter package that builds a ListView and notifies when the widgets are on screen within a provided area.
