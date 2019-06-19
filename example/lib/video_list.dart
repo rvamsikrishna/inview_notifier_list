@@ -10,7 +10,7 @@ class VideoList extends StatelessWidget {
       fit: StackFit.expand,
       children: <Widget>[
         InViewNotifierList(
-          srollDirection: Axis.vertical,
+          scrollDirection: Axis.vertical,
           initialInViewIds: ['0'],
           isInViewPortCondition:
               (double deltaTop, double deltaBottom, double viewPortDimension) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stream_transform/stream_transform.dart';
 
+///builds a [ListView] and notifies when the widgets are on screen within a provided area.
 class InViewNotifierList extends StatefulWidget {
   ///The String list of ids of the child widgets that should be initialized as inView
   ///when the list view is built for the first time.
@@ -29,7 +30,7 @@ class InViewNotifierList extends StatefulWidget {
   final Duration throttleDuration;
 
   ///The axis along which the scroll view scrolls.
-  final Axis srollDirection;
+  final Axis scrollDirection;
 
   ///The function that defines the area within which the widgets should be notified
   ///as inView.
@@ -46,7 +47,7 @@ class InViewNotifierList extends StatefulWidget {
     this.endNotificationOffset = 0.0,
     this.onListEndReached,
     this.throttleDuration = const Duration(milliseconds: 200),
-    this.srollDirection = Axis.vertical,
+    this.scrollDirection = Axis.vertical,
     @required this.isInViewPortCondition,
     this.controller,
   })  : assert(contextCacheCount >= 1),
@@ -120,7 +121,7 @@ class _InViewNotifierListState extends State<InViewNotifierList> {
       child: NotificationListener<ScrollNotification>(
         child: ListView.custom(
           controller: widget.controller,
-          scrollDirection: widget.srollDirection,
+          scrollDirection: widget.scrollDirection,
           childrenDelegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
               return widget.children[index];
@@ -134,7 +135,7 @@ class _InViewNotifierListState extends State<InViewNotifierList> {
           final AxisDirection scrollDirection =
               notification.metrics.axisDirection;
 
-          switch (widget.srollDirection) {
+          switch (widget.scrollDirection) {
             case Axis.vertical:
               isScrollDirection = scrollDirection == AxisDirection.down ||
                   scrollDirection == AxisDirection.up;
@@ -237,6 +238,7 @@ class InViewState extends ChangeNotifier {
     return _currentInViewIds.contains(id);
   }
 
+  ///The listener that is called when the list view is scrolled.
   void onScroll(ScrollNotification notification) {
     // Iterate through each item to check
     // whether it is in the viewport
@@ -285,6 +287,8 @@ class InViewState extends ChangeNotifier {
   }
 }
 
+///The function that defines the area within which the widgets should be notified
+///as inView.
 typedef bool IsInViewPortCondition(
   double deltaTop,
   double deltaBottom,
