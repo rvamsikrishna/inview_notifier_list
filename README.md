@@ -2,8 +2,8 @@
 
 A Flutter package that builds a [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html) and notifies when the widgets are on screen within a provided area. 
 
-|                          Example 1                           |                          Example 2                           |                  Example 3(Auto-play video)                  |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|                                                            Example 1                                                             |                                                              Example 2                                                              |                                                     Example 3(Auto-play video)                                                      |
+| :------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
 | ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/31307345/59602739-2f022d00-9125-11e9-84ef-19a33f8bd782.gif) | ![ezgif com-video-to-gif (1)](https://user-images.githubusercontent.com/31307345/59602740-2f022d00-9125-11e9-8ee6-044e44f6048f.gif) | ![ezgif com-video-to-gif (2)](https://user-images.githubusercontent.com/31307345/59602744-2f9ac380-9125-11e9-8a8f-7e68bdc27c16.gif) |
 
 ## Use-cases
@@ -22,7 +22,7 @@ Just add the package to your dependencies in the `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  inview_notifier_list: ^0.0.1
+  inview_notifier_list: ^0.0.2
 ```
 
 ## Basic Usage
@@ -174,7 +174,7 @@ That's it, done! Run the [example](https://github.com/rvamsikrishna/inview_notif
 - `endNotificationOffset`:   The distance from the bottom of the list where the `onListEndReached` should be invoked. Defaults to the end of the list i.e 0.0.
 - `onListEndReached`:  The function that is invoked when the list scroll reaches the end or the `endNotificationOffset` if provided.
 - `throttleDuration`:   The duration to be used for throttling the scroll notification. Defaults to 200 milliseconds.
-- `srollDirection`: The axis along which the scroll view scrolls. Defaults to `Axis.vertical`.
+- `scrollDirection`: The axis along which the scroll view scrolls. Defaults to `Axis.vertical`.
 - `controller`:   An object that can be used to control the position to which this scroll view is scrolled. See [ScrollController](https://api.flutter.dev/flutter/widgets/ScrollController-class.html).
 - 
 
