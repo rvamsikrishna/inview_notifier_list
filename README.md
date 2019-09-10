@@ -22,7 +22,7 @@ Just add the package to your dependencies in the `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  inview_notifier_list: ^0.0.2
+  inview_notifier_list: ^0.0.3
 ```
 
 ## Basic Usage
@@ -176,7 +176,8 @@ That's it, done! Run the [example](https://github.com/rvamsikrishna/inview_notif
 - `throttleDuration`:   The duration to be used for throttling the scroll notification. Defaults to 200 milliseconds.
 - `scrollDirection`: The axis along which the scroll view scrolls. Defaults to `Axis.vertical`.
 - `controller`:   An object that can be used to control the position to which this scroll view is scrolled. See [ScrollController](https://api.flutter.dev/flutter/widgets/ScrollController-class.html).
-- 
+- `padding`: The amount of space by which to inset the children.
+- `physics`: How the scroll view should respond to user input. See [ScrollPhysics](https://api.flutter.dev/flutter/widgets/ScrollPhysics-class.html).
 
 ##### Credits:
 
