@@ -39,6 +39,12 @@ class InViewNotifierList extends StatefulWidget {
   ///An object that can be used to control the position to which this scroll view is scrolled.
   final ScrollController controller;
 
+  ///The padding of the scroll view.
+  final EdgeInsets padding;
+
+  /// The physics of the scroll view
+  final ScrollPhysics physics;
+
   const InViewNotifierList({
     Key key,
     this.children = const [],
@@ -50,6 +56,8 @@ class InViewNotifierList extends StatefulWidget {
     this.scrollDirection = Axis.vertical,
     @required this.isInViewPortCondition,
     this.controller,
+    this.padding,
+    this.physics,
   })  : assert(contextCacheCount >= 1),
         assert(endNotificationOffset >= 0.0),
         assert(children != null),
@@ -120,8 +128,10 @@ class _InViewNotifierListState extends State<InViewNotifierList> {
       inViewState: _inViewState,
       child: NotificationListener<ScrollNotification>(
         child: ListView.custom(
+          padding: widget.padding,
           controller: widget.controller,
           scrollDirection: widget.scrollDirection,
+          physics: widget.physics,
           childrenDelegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
               return widget.children[index];
