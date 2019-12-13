@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show describeIdentity;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -111,7 +112,7 @@ class _InViewNotifierListState extends State<InViewNotifierList> {
     _streamController = StreamController<ScrollNotification>();
 
     _streamController.stream
-        .transform(throttle(widget.throttleDuration))
+//        .transform(throttle(widget.throttleDuration))
         .listen(_inViewState.onScroll);
   }
 
@@ -204,6 +205,11 @@ class _WidgetData {
   final String id;
 
   _WidgetData({@required this.context, @required this.id});
+
+  @override
+  String toString() {
+    return describeIdentity(this) + " id=$id";
+  }
 }
 
 ///Class that stores the context's of the widgets and String id's of the widgets that are
@@ -231,6 +237,7 @@ class InViewState extends ChangeNotifier {
 
   ///Add the widget's context and an unique string id that needs to be notified.
   void addContext({@required BuildContext context, @required String id}) {
+    _contexts.removeWhere((d) => d.id == id);
     _contexts.add(_WidgetData(context: context, id: id));
   }
 
