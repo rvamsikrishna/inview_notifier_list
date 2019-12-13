@@ -45,6 +45,7 @@ class _HomePageState extends State<HomePage> {
         body: TabBarView(
           children: <Widget>[
             MyList(
+              key: ValueKey("list1"),
               initialInViewIds: ['0'],
               inViewArea: Container(
                 height: 1.0,

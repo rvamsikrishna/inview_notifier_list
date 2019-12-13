@@ -23,6 +23,7 @@ class Box extends StatelessWidget {
           color: isInView ? Colors.lightGreen : Colors.amber,
           child: Text(
             '$id : $inViewTxt',
+            key: ValueKey("item-$id"),
             style: Theme.of(context).textTheme.display1,
           ),
         );
