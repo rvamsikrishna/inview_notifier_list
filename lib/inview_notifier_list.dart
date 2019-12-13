@@ -112,7 +112,7 @@ class _InViewNotifierListState extends State<InViewNotifierList> {
     _streamController = StreamController<ScrollNotification>();
 
     _streamController.stream
-//        .transform(throttle(widget.throttleDuration))
+        .audit(widget.throttleDuration)
         .listen(_inViewState.onScroll);
   }
 
@@ -182,6 +182,7 @@ class _InViewNotifierListState extends State<InViewNotifierList> {
           if (!_streamController.isClosed && isScrollDirection) {
             _streamController.add(notification);
           }
+          return false;
         },
       ),
     );
