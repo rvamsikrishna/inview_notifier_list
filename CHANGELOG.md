@@ -1,3 +1,9 @@
+## [0.0.4] - 13th December 2019.
+
+- Fixed fast scroll bugs.
+- Updated use of `ancestorInheritedElementForWidgetOfExactType`(depricated) with `getElementForInheritedWidgetOfExactType`.
+- Added more properties to list like `reverse`, `shrinkWrap`.
+
 ## [0.0.3] - 10th September 2019.
 
 Added two extra properties `padding` and `physics`.

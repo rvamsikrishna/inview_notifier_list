@@ -46,6 +46,15 @@ class InViewNotifierList extends StatefulWidget {
   /// The physics of the scroll view
   final ScrollPhysics physics;
 
+  ///Whether the scroll view scrolls in the reading direction.
+  final bool reverse;
+
+  ///Whether this is the primary scroll view associated with the parent [PrimaryScrollController].
+  final bool primary;
+
+  ///Whether the extent of the scroll view in the [scrollDirection] should be determined by the contents being viewed.
+  final bool shrinkWrap;
+
   const InViewNotifierList({
     Key key,
     this.children = const [],
@@ -59,6 +68,9 @@ class InViewNotifierList extends StatefulWidget {
     this.controller,
     this.padding,
     this.physics,
+    this.reverse = false,
+    this.primary,
+    this.shrinkWrap = false,
   })  : assert(contextCacheCount >= 1),
         assert(endNotificationOffset >= 0.0),
         assert(children != null),
@@ -70,7 +82,7 @@ class InViewNotifierList extends StatefulWidget {
 
   static InViewState of(BuildContext context) {
     final _InheritedInViewWidget widget = context
-        .ancestorInheritedElementForWidgetOfExactType(_InheritedInViewWidget)
+        .getElementForInheritedWidgetOfExactType<_InheritedInViewWidget>()
         .widget;
     return widget.inViewState;
   }
@@ -133,6 +145,9 @@ class _InViewNotifierListState extends State<InViewNotifierList> {
           controller: widget.controller,
           scrollDirection: widget.scrollDirection,
           physics: widget.physics,
+          reverse: widget.reverse,
+          primary: widget.primary,
+          shrinkWrap: widget.shrinkWrap,
           childrenDelegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
               return widget.children[index];

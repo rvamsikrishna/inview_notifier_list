@@ -178,6 +178,12 @@ That's it, done! Run the [example](https://github.com/rvamsikrishna/inview_notif
 - `controller`:   An object that can be used to control the position to which this scroll view is scrolled. See [ScrollController](https://api.flutter.dev/flutter/widgets/ScrollController-class.html).
 - `padding`: The amount of space by which to inset the children.
 - `physics`: How the scroll view should respond to user input. See [ScrollPhysics](https://api.flutter.dev/flutter/widgets/ScrollPhysics-class.html).
+- `shrinkWrap`: Whether the extent of the scroll view in the scrollDirection should be determined by the contents being viewed.
+- `primary`: Whether this is the primary scroll view associated with the parent [PrimaryScrollController](https://api.flutter.dev/flutter/widgets/PrimaryScrollController-class.html).
+- `reverse`: Whether the scroll view scrolls in the reading direction.
+
+
+
 
 ##### Credits:
 
