@@ -22,7 +22,7 @@ Just add the package to your dependencies in the `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  inview_notifier_list: ^0.0.3
+  inview_notifier_list: ^0.0.4
 ```
 
 ## Basic Usage
