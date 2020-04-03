@@ -33,19 +33,17 @@ class MyList extends StatelessWidget {
           controller: controller,
           initialInViewIds: initialInViewIds,
           isInViewPortCondition: condition,
-          children: List.generate(
-            itemsLength,
-            (index) {
-              return Container(
-                width: double.infinity,
-                height: 300.0,
-                color: Colors.blueGrey,
-                alignment: Alignment.center,
-                margin: EdgeInsets.symmetric(vertical: 50.0),
-                child: Box(id: '$index'),
-              );
-            },
-          ),
+          itemCount: itemsLength,
+          builder: (BuildContext context, int index) {
+            return Container(
+              width: double.infinity,
+              height: 300.0,
+              color: Colors.blueGrey,
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(vertical: 50.0),
+              child: Box(id: '$index'),
+            );
+          },
         ),
         IgnorePointer(
           ignoring: true,
