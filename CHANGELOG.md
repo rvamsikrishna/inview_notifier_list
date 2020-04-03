@@ -1,3 +1,17 @@
+## [1.0.0] - 3rd April 2020.
+
+- Code refactors.
+
+- Added support for `CustomScrollView` with the addition of `InViewNotifierCustomScrollView`.
+
+- `InViewNotifierList`  now uses a `builder` function to build it's children. This is replaced with previously used `children` property.
+
+- Added `InViewNotifierWidget` which gets notified if it is currently inside the viewport condition
+
+  provided by the `InViewPortCondition` condition. Checkout out the [example](https://github.com/rvamsikrishna/inview_notifier_list/tree/master/example/lib) for usage.
+
+- No longer need to add widget's context to `InViewState` and use `AnimatedBuilder` to get notified if the widget is in-view.
+
 ## [0.0.4] - 13th December 2019.
 
 - Fixed fast scroll bugs.
@@ -29,3 +43,4 @@ InViewNotifierList(
   scrollDirection: Axis.vertical,
 )
 `
+```
