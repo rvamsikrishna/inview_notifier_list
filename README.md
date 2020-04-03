@@ -124,7 +124,7 @@ Use the `InViewNotifierWidget` to get notified if the required widget is current
 The `InViewNotifierWidget` consists of the following properties:
 
 1. `id`: a **required** String property. This should be unique for every widget that wants to get notified.
-2.  `builder` : Signature for a function that creates a widget for a given index.  The function that defines and returns the widget that should be notified as inView. See `InViewNotifierWidgetBuilder`.
+2.  `builder` : Signature for a function that creates a widget for a given index.  The function that defines and returns the widget that should be notified as inView. See [InViewNotifierWidgetBuilder](https://pub.dev/documentation/inview_notifier_list/latest/inview_notifier_list/InViewNotifierWidgetBuilder.html).
 3. `child`:  The child widget to pass to the builder.
 
 
@@ -179,8 +179,8 @@ Run the [example](https://github.com/rvamsikrishna/inview_notifier_list/tree/mas
 
 ## Types of Notifiers
 
-1. `InViewNotifierList`:  builds a [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html) and notifies when the widgets are on screen within a provided area.
-2. `InViewNotifierCustomScrollView`: builds a [CustomScrollView](https://api.flutter.dev/flutter/widgets/CustomScrollView-class.html) and notifies when the widgets are on screen within a provided area.
+1. [InViewNotifierList](https://pub.dev/documentation/inview_notifier_list/latest/inview_notifier_list/InViewNotifierList-class.html):  builds a [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html) and notifies when the widgets are on screen within a provided area.
+2. [InViewNotifierCustomScrollView](https://pub.dev/documentation/inview_notifier_list/latest/inview_notifier_list/InViewNotifierCustomScrollView-class.html): builds a [CustomScrollView](https://api.flutter.dev/flutter/widgets/CustomScrollView-class.html) and notifies when the widgets are on screen within a provided area.
 
 ## Properties
 
