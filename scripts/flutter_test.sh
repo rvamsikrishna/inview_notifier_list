@@ -1,4 +1,3 @@
-set -e # abort CI if an error happens
 cd $1
 flutter packages get
 flutter format --set-exit-if-changed --line-length 120 lib test
