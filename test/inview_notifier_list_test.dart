@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
 import '../example/lib/my_list.dart';
+import '../example/lib/csv_example.dart';
 
 void main() {
   final TestWidgetsFlutterBinding binding =
@@ -35,13 +36,19 @@ void main() {
       WidgetTester tester, {
       IsInViewPortCondition condition,
       ScrollController controller,
+      bool isCustomScrollView = false,
     }) {
       return tester.pumpWidget(
         MaterialApp(
-          home: MyList(
-            inViewPortCondition: condition,
-            controller: controller,
-          ),
+          home: !isCustomScrollView
+              ? MyList(
+                  inViewPortCondition: condition,
+                  controller: controller,
+                )
+              : CSVExample(
+                  scrollController: controller,
+                  inViewPortCondition: condition,
+                ),
         ),
       );
     }
@@ -65,6 +72,37 @@ void main() {
       await tester.pump(Duration(milliseconds: 2000));
 
       expect(ContianerByColorFinder(Colors.lightGreen), findsOneWidget);
+    });
+
+    testWidgets(
+        'Only 3 in grid containers are green when halfway condition is provided for CustomScrollView',
+        (WidgetTester tester) async {
+      final ScrollController controller = ScrollController();
+      IsInViewPortCondition condition =
+          (double deltaTop, double deltaBottom, double vpHeight) {
+        return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
+      };
+
+      await binding.setSurfaceSize(Size(500, 800));
+
+      await _buildInViewNotifier(
+        tester,
+        condition: condition,
+        controller: controller,
+        isCustomScrollView: true,
+      );
+
+      expect(ContianerByColorFinder(Colors.lightGreen), findsNWidgets(3));
+      controller.jumpTo(300.0);
+      await tester.pump(Duration(milliseconds: 2000));
+
+      expect(ContianerByColorFinder(Colors.lightGreen), findsNWidgets(3));
+
+      //jump to a sliver listview. Now only 1 item is inview.
+      controller.jumpTo(1200.0);
+      await tester.pump(Duration(milliseconds: 2000));
+
+      expect(ContianerByColorFinder(Colors.lightGreen), findsNWidgets(1));
     });
 
     testWidgets(
