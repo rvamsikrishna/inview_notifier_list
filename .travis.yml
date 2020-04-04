@@ -1,21 +1,15 @@
-language: bash
-os:
-  - osx
-env:
-  - FLUTTER_CHANNEL="stable"
-  - FLUTTER_CHANNEL="master"
-sudo: false
-before_script:
-  - cd ..
-  - git clone https://github.com/flutter/flutter.git -b $FLUTTER_CHANNEL
-  - export PATH=$PATH:$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin
-  - cd -
-  - flutter doctor
+language: dart
+dist: xenial
+addons:
+  apt:
+    packages:
+      - lib32stdc++6
+install:
+  - git clone https://github.com/flutter/flutter.git -b stable
+  - ./flutter/bin/flutter doctor
 script:
-  - ./scripts/flutter_test.sh .
-
-matrix:
-  fast_finish: true
+  - ./flutter/bin/flutter packages get
+  - ./flutter/bin/flutter test
 cache:
   directories:
     - $HOME/.pub-cache
