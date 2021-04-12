@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  stream_transform: ^1.1.0
+  stream_transform: ^2.0.0
 
 dev_dependencies:
   flutter_driver:
