@@ -5,15 +5,15 @@ class VideoWidget extends StatefulWidget {
   final String url;
   final bool play;
 
-  const VideoWidget({Key key, @required this.url, @required this.play})
+  const VideoWidget({Key? key, required this.url, required this.play})
       : super(key: key);
   @override
   _VideoWidgetState createState() => _VideoWidgetState();
 }
 
 class _VideoWidgetState extends State<VideoWidget> {
-  VideoPlayerController _controller;
-  Future<void> _initializeVideoPlayerFuture;
+  late VideoPlayerController _controller;
+  Future<void>? _initializeVideoPlayerFuture;
 
   @override
   void initState() {
