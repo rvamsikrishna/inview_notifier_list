@@ -29,7 +29,7 @@ class VideoList extends StatelessWidget {
                   return InViewNotifierWidget(
                     id: '$index',
                     builder:
-                        (BuildContext context, bool isInView, Widget child) {
+                        (BuildContext context, bool isInView, Widget? child) {
                       return VideoWidget(
                           play: isInView,
                           url:
