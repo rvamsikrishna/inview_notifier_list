@@ -10,21 +10,21 @@ import 'inview_state.dart';
 ///It's just like the [ListView.builder].
 class InViewNotifierList extends InViewNotifier {
   InViewNotifierList({
-    Key key,
-    int itemCount,
-    IndexedWidgetBuilder builder,
+    Key? key,
+    int? itemCount,
+    required IndexedWidgetBuilder builder,
     List<String> initialInViewIds = const [],
     int contextCacheCount = 10,
     double endNotificationOffset = 0.0,
-    VoidCallback onListEndReached,
+    VoidCallback? onListEndReached,
     Duration throttleDuration = const Duration(milliseconds: 200),
     Axis scrollDirection = Axis.vertical,
-    @required IsInViewPortCondition isInViewPortCondition,
-    ScrollController controller,
-    EdgeInsets padding,
-    ScrollPhysics physics,
+    required IsInViewPortCondition isInViewPortCondition,
+    ScrollController? controller,
+    EdgeInsets? padding,
+    ScrollPhysics? physics,
     bool reverse = false,
-    bool primary,
+    bool? primary,
     bool shrinkWrap = false,
     bool addAutomaticKeepAlives = true,
   })  : assert(contextCacheCount >= 1),
@@ -53,10 +53,10 @@ class InViewNotifierList extends InViewNotifier {
           ),
         );
 
-  static InViewState of(BuildContext context) {
+  static InViewState? of(BuildContext context) {
     final InheritedInViewWidget widget = context
-        .getElementForInheritedWidgetOfExactType<InheritedInViewWidget>()
-        .widget;
+        .getElementForInheritedWidgetOfExactType<InheritedInViewWidget>()!
+        .widget as InheritedInViewWidget;
     return widget.inViewState;
   }
 }
@@ -70,21 +70,21 @@ class InViewNotifierList extends InViewNotifier {
 
 class InViewNotifierCustomScrollView extends InViewNotifier {
   InViewNotifierCustomScrollView({
-    Key key,
-    @required List<Widget> slivers,
+    Key? key,
+    required List<Widget> slivers,
     List<String> initialInViewIds = const [],
     int contextCacheCount = 10,
     double endNotificationOffset = 0.0,
-    VoidCallback onListEndReached,
+    VoidCallback? onListEndReached,
     Duration throttleDuration = const Duration(milliseconds: 200),
     Axis scrollDirection = Axis.vertical,
-    @required IsInViewPortCondition isInViewPortCondition,
-    ScrollController controller,
-    ScrollPhysics physics,
+    required IsInViewPortCondition isInViewPortCondition,
+    ScrollController? controller,
+    ScrollPhysics? physics,
     bool reverse = false,
-    bool primary,
+    bool? primary,
     bool shrinkWrap = false,
-    Key center,
+    Key? center,
     double anchor = 0.0,
   }) : super(
           key: key,
@@ -107,10 +107,10 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
           ),
         );
 
-  static InViewState of(BuildContext context) {
+  static InViewState? of(BuildContext context) {
     final InheritedInViewWidget widget = context
-        .getElementForInheritedWidgetOfExactType<InheritedInViewWidget>()
-        .widget;
+        .getElementForInheritedWidgetOfExactType<InheritedInViewWidget>()!
+        .widget as InheritedInViewWidget;
     return widget.inViewState;
   }
 }
@@ -145,12 +145,12 @@ class InViewNotifierWidget extends StatelessWidget {
   final InViewNotifierWidgetBuilder builder;
 
   ///The child widget to pass to the builder.
-  final Widget child;
+  final Widget? child;
 
   const InViewNotifierWidget({
-    Key key,
-    @required this.id,
-    @required this.builder,
+    Key? key,
+    required this.id,
+    required this.builder,
     this.child,
   })  : assert(id != null),
         assert(builder != null),
@@ -158,14 +158,14 @@ class InViewNotifierWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    InViewState state = InViewNotifierList.of(context);
+    InViewState state = InViewNotifierList.of(context)!;
     state.addContext(context: context, id: id);
 
     return Container(
       child: AnimatedBuilder(
         animation: state,
         child: child,
-        builder: (BuildContext context, Widget child) {
+        builder: (BuildContext context, Widget? child) {
           final bool isInView = state.inView(id);
 
           return builder(context, isInView, child);
@@ -184,5 +184,5 @@ class InViewNotifierWidget extends StatelessWidget {
 typedef Widget InViewNotifierWidgetBuilder(
   BuildContext context,
   bool isInView,
-  Widget child,
+  Widget? child,
 );

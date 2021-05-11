@@ -26,7 +26,7 @@ class InViewNotifier extends StatefulWidget {
 
   ///The function that is invoked when the list scroll reaches the end
   ///or the [endNotificationOffset] if provided.
-  final VoidCallback onListEndReached;
+  final VoidCallback? onListEndReached;
 
   ///The duration to be used for throttling the scroll notification.
   ///Defaults to 200 milliseconds.
@@ -40,14 +40,14 @@ class InViewNotifier extends StatefulWidget {
   final IsInViewPortCondition isInViewPortCondition;
 
   InViewNotifier({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.initialInViewIds = const [],
     this.contextCacheCount = 10,
     this.endNotificationOffset = 0.0,
     this.onListEndReached,
     this.throttleDuration = const Duration(milliseconds: 200),
-    @required this.isInViewPortCondition,
+    required this.isInViewPortCondition,
   })  : assert(contextCacheCount >= 1),
         assert(endNotificationOffset >= 0.0),
         assert(child != null),
@@ -60,8 +60,8 @@ class InViewNotifier extends StatefulWidget {
 }
 
 class _InViewNotifierState extends State<InViewNotifier> {
-  InViewState _inViewState;
-  StreamController<ScrollNotification> _streamController;
+  InViewState? _inViewState;
+  StreamController<ScrollNotification>? _streamController;
 
   @override
   void initState() {
@@ -93,9 +93,9 @@ class _InViewNotifierState extends State<InViewNotifier> {
   void _startListening() {
     _streamController = StreamController<ScrollNotification>();
 
-    _streamController.stream
+    _streamController!.stream
         .audit(widget.throttleDuration)
-        .listen(_inViewState.onScroll);
+        .listen(_inViewState!.onScroll);
   }
 
   void _initializeInViewState() {
@@ -112,7 +112,7 @@ class _InViewNotifierState extends State<InViewNotifier> {
       child: NotificationListener<ScrollNotification>(
         child: widget.child,
         onNotification: (ScrollNotification notification) {
-          bool isScrollDirection;
+          late bool isScrollDirection;
           //the direction of user scroll up, down, left, right.
           final AxisDirection scrollDirection =
               notification.metrics.axisDirection;
@@ -134,7 +134,7 @@ class _InViewNotifierState extends State<InViewNotifier> {
               maxScroll - notification.metrics.pixels <=
                   widget.endNotificationOffset) {
             if (widget.onListEndReached != null) {
-              widget.onListEndReached();
+              widget.onListEndReached!();
             }
           }
 
@@ -143,15 +143,15 @@ class _InViewNotifierState extends State<InViewNotifier> {
               notification.direction == ScrollDirection.idle) {
             //Keeps only the last number contexts provided by user. This prevents overcalculation
             //by iterating over non visible widget contexts in scroll listener
-            _inViewState.removeContexts(widget.contextCacheCount);
+            _inViewState!.removeContexts(widget.contextCacheCount);
 
-            if (!_streamController.isClosed && isScrollDirection) {
-              _streamController.add(notification);
+            if (!_streamController!.isClosed && isScrollDirection) {
+              _streamController!.add(notification);
             }
           }
 
-          if (!_streamController.isClosed && isScrollDirection) {
-            _streamController.add(notification);
+          if (!_streamController!.isClosed && isScrollDirection) {
+            _streamController!.add(notification);
           }
           return false;
         },

@@ -9,14 +9,16 @@ import 'inview_notifier.dart';
 class InViewState extends ChangeNotifier {
   ///The context's of the widgets in the listview that the user expects a
   ///notification whether it is in-view or not.
-  Set<WidgetData> _contexts;
+  late Set<WidgetData> _contexts;
 
   ///The String id's of the widgets in the listview that the user expects a
   ///notification whether it is in-view or not. This helps to make recognition easy.
   List<String> _currentInViewIds = [];
-  final IsInViewPortCondition _isInViewCondition;
+  final IsInViewPortCondition? _isInViewCondition;
 
-  InViewState({List<String> intialIds, Function isInViewCondition})
+  InViewState(
+      {required List<String> intialIds,
+      bool Function(double, double, double)? isInViewCondition})
       : _isInViewCondition = isInViewCondition {
     _contexts = Set<WidgetData>();
     _currentInViewIds.addAll(intialIds);
@@ -28,7 +30,7 @@ class InViewState extends ChangeNotifier {
   int get numberOfContextStored => _contexts.length;
 
   ///Add the widget's context and an unique string id that needs to be notified.
-  void addContext({@required BuildContext context, @required String id}) {
+  void addContext({required BuildContext? context, required String id}) {
     _contexts.removeWhere((d) => d.id == id);
     _contexts.add(WidgetData(context: context, id: id));
   }
@@ -53,7 +55,7 @@ class InViewState extends ChangeNotifier {
     // whether it is in the viewport
     _contexts.forEach((WidgetData item) {
       // Retrieve the RenderObject, linked to a specific item
-      final RenderObject renderObject = item.context.findRenderObject();
+      final RenderObject? renderObject = item.context!.findRenderObject();
 
       // If none was to be found, or if not attached, leave by now
       if (renderObject == null || !renderObject.attached) {
@@ -62,13 +64,13 @@ class InViewState extends ChangeNotifier {
 
       //Retrieve the viewport related to the scroll area
       final RenderAbstractViewport viewport =
-          RenderAbstractViewport.of(renderObject);
+          RenderAbstractViewport.of(renderObject)!;
       final double vpHeight = notification.metrics.viewportDimension;
       final RevealedOffset vpOffset =
           viewport.getOffsetToReveal(renderObject, 0.0);
 
       // Retrieve the dimensions of the item
-      final Size size = renderObject?.semanticBounds?.size;
+      final Size size = renderObject.semanticBounds.size;
 
       //distance from top of the widget to top of the viewport
       final double deltaTop = vpOffset.offset - notification.metrics.pixels;
@@ -78,7 +80,7 @@ class InViewState extends ChangeNotifier {
       bool isInViewport = false;
 
       //Check if the item is in the viewport by evaluating the provided widget's isInViewPortCondition condition.
-      isInViewport = _isInViewCondition(deltaTop, deltaBottom, vpHeight);
+      isInViewport = _isInViewCondition!(deltaTop, deltaBottom, vpHeight);
 
       if (isInViewport) {
         //prevent changing the value on every scroll if its already the same
