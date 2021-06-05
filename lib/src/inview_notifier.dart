@@ -50,8 +50,6 @@ class InViewNotifier extends StatefulWidget {
     required this.isInViewPortCondition,
   })  : assert(contextCacheCount >= 1),
         assert(endNotificationOffset >= 0.0),
-        assert(child != null),
-        assert(isInViewPortCondition != null),
         scrollDirection = child.scrollDirection,
         super(key: key);
 

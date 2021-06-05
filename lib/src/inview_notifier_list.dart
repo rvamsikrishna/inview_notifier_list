@@ -29,8 +29,6 @@ class InViewNotifierList extends InViewNotifier {
     bool addAutomaticKeepAlives = true,
   })  : assert(contextCacheCount >= 1),
         assert(endNotificationOffset >= 0.0),
-        assert(builder != null),
-        assert(isInViewPortCondition != null),
         super(
           key: key,
           initialInViewIds: initialInViewIds,
@@ -152,9 +150,7 @@ class InViewNotifierWidget extends StatelessWidget {
     required this.id,
     required this.builder,
     this.child,
-  })  : assert(id != null),
-        assert(builder != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

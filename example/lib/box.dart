@@ -24,7 +24,7 @@ class Box extends StatelessWidget {
           child: Text(
             '$id : $inViewTxt',
             key: ValueKey("item-$id"),
-            style: Theme.of(context).textTheme.display1,
+            style: Theme.of(context).textTheme.headline4,
           ),
         );
       },
