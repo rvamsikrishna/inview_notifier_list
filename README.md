@@ -1,6 +1,6 @@
 # **inview_notifier_list**
 
-[![Build Status](https://travis-ci.org/rvamsikrishna/inview_notifier_list.svg?branch=master)](https://travis-ci.org/rvamsikrishna/inview_notifier_list) [![pub package](https://img.shields.io/pub/v/inview_notifier_list.svg)](https://pub.dev/packages/inview_notifier_list)
+[![pub package](https://img.shields.io/badge/pub-v2.0.0-blue)](https://pub.dev/packages/inview_notifier_list)
 
 A Flutter package that builds a [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html) or [CustomScrollView](https://api.flutter.dev/flutter/widgets/CustomScrollView-class.html) and notifies when the widgets are on screen within a provided area.
 
@@ -17,7 +17,6 @@ A Flutter package that builds a [ListView](https://api.flutter.dev/flutter/widge
 - [Basic Usage](https://github.com/rvamsikrishna/inview_notifier_list#basic-usage)
 - [Types of Notifiers](https://github.com/rvamsikrishna/inview_notifier_list#types-of-notifiers)
 - [Properties](https://github.com/rvamsikrishna/inview_notifier_list#properties)
-- [Migration from v0.0.4 to v1.0.0](https://github.com/rvamsikrishna/inview_notifier_list#migration-from-v004-to-v100)
 - [Credits](https://github.com/rvamsikrishna/inview_notifier_list#credits)
 
 ## Use-cases
@@ -34,7 +33,7 @@ Just add the package to your dependencies in the `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  inview_notifier_list: ^1.0.0
+  inview_notifier_list: ^2.0.0
 ```
 
 ## Basic Usage
