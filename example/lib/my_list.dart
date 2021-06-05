@@ -5,13 +5,13 @@ import 'box.dart';
 
 class MyList extends StatelessWidget {
   final int itemsLength;
-  final IsInViewPortCondition inViewPortCondition;
-  final Widget inViewArea;
+  final IsInViewPortCondition? inViewPortCondition;
+  final Widget? inViewArea;
   final List<String> initialInViewIds;
-  final ScrollController controller;
+  final ScrollController? controller;
 
   const MyList({
-    Key key,
+    Key? key,
     this.itemsLength = 30,
     this.inViewPortCondition,
     this.inViewArea,

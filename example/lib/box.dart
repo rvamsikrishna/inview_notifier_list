@@ -5,15 +5,15 @@ class Box extends StatelessWidget {
   final String id;
   final double height;
   const Box({
-    Key key,
-    @required this.id,
+    Key? key,
+    required this.id,
     this.height = 250.0,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return InViewNotifierWidget(
       id: id,
-      builder: (BuildContext context, bool isInView, Widget child) {
+      builder: (BuildContext context, bool isInView, Widget? child) {
         final String inViewTxt = isInView ? 'inView' : 'notInView';
 
         return Container(

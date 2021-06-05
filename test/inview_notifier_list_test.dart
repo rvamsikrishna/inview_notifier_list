@@ -6,7 +6,7 @@ import '../example/lib/csv_example.dart';
 
 void main() {
   final TestWidgetsFlutterBinding binding =
-      TestWidgetsFlutterBinding.ensureInitialized();
+      TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
   group('test the inViewState', () {
     test('only n number of contexts are stored', () {
       final InViewState state = InViewState(
@@ -34,20 +34,20 @@ void main() {
   group('Test the InViewNotifierList widget', () {
     _buildInViewNotifier(
       WidgetTester tester, {
-      IsInViewPortCondition condition,
-      ScrollController controller,
+      IsInViewPortCondition? condition,
+      ScrollController? controller,
       bool isCustomScrollView = false,
     }) {
       return tester.pumpWidget(
         MaterialApp(
           home: !isCustomScrollView
               ? MyList(
-                  inViewPortCondition: condition,
-                  controller: controller,
+                  inViewPortCondition: condition!,
+                  controller: controller!,
                 )
               : CSVExample(
-                  scrollController: controller,
-                  inViewPortCondition: condition,
+                  scrollController: controller!,
+                  inViewPortCondition: condition!,
                 ),
         ),
       );
@@ -141,9 +141,9 @@ class ContianerByColorFinder extends MatchFinder {
   @override
   bool matches(Element candidate) {
     if (candidate.widget is Container) {
-      final Container contianerWidget = candidate.widget;
+      final Container contianerWidget = candidate.widget as Container;
       if (contianerWidget.decoration is BoxDecoration) {
-        final BoxDecoration decoration = contianerWidget.decoration;
+        final BoxDecoration decoration = contianerWidget.decoration as BoxDecoration;
         return decoration.color == color;
       }
       return false;

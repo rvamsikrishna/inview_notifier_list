@@ -3,14 +3,14 @@ import 'package:test/test.dart';
 
 void main() {
   group("test scroll fast up and down", () {
-    FlutterDriver driver;
+    late FlutterDriver driver;
 
     setUpAll(() async {
       driver = await FlutterDriver.connect();
     });
 
     tearDownAll(() async {
-      driver?.close();
+      driver.close();
     });
 
     test("scroll fast", () async {

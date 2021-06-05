@@ -4,10 +4,10 @@ import 'package:inview_notifier_list/inview_notifier_list.dart';
 import 'box.dart';
 
 class CSVExample extends StatelessWidget {
-  final ScrollController scrollController;
-  final IsInViewPortCondition inViewPortCondition;
+  final ScrollController? scrollController;
+  final IsInViewPortCondition? inViewPortCondition;
 
-  const CSVExample({Key key, this.scrollController, this.inViewPortCondition})
+  const CSVExample({Key? key, this.scrollController, this.inViewPortCondition})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
