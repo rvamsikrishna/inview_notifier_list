@@ -35,6 +35,10 @@ class InViewState extends ChangeNotifier {
     _contexts.add(WidgetData(context: context, id: id));
   }
 
+  void removeContext({required BuildContext context}) {
+    _contexts.removeWhere((d) => d.context == context);
+  }
+
   ///Keeps the number of widget's contexts the InViewNotifier should stored/cached for
   ///the calculations thats needed to be done to check if the widgets are inView or not.
   ///Defaults to 10 and should be greater than 1. This is done to reduce the number of calculations being performed.

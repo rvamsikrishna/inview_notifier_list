@@ -129,7 +129,7 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
 ///
 /// Using this pre-built child is entirely optional, but can improve
 /// performance significantly in some cases and is therefore a good practice.
-class InViewNotifierWidget extends StatelessWidget {
+class InViewNotifierWidget extends StatefulWidget {
   ///a required String property. This should be unique for every widget
   ///that wants to get notified.
   final String id;
@@ -153,18 +153,44 @@ class InViewNotifierWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    InViewState state = InViewNotifierList.of(context)!;
-    state.addContext(context: context, id: id);
+  _InViewNotifierWidgetState createState() => _InViewNotifierWidgetState();
+}
 
+class _InViewNotifierWidgetState extends State<InViewNotifierWidget> {
+  late final InViewState state;
+
+  @override
+  void initState() {
+    super.initState();
+    state = InViewNotifierList.of(context)!;
+    state.addContext(context: context, id: widget.id);
+  }
+
+  @override
+  void dispose() {
+    state.removeContext(context: context);
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(InViewNotifierWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.id != widget.id) {
+      state.removeContext(context: context);
+      state.addContext(context: context, id: widget.id);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       child: AnimatedBuilder(
         animation: state,
-        child: child,
+        child: widget.child,
         builder: (BuildContext context, Widget? child) {
-          final bool isInView = state.inView(id);
+          final bool isInView = state.inView(widget.id);
 
-          return builder(context, isInView, child);
+          return widget.builder(context, isInView, child);
         },
       ),
     );
