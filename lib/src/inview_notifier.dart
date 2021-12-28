@@ -16,11 +16,6 @@ class InViewNotifier extends StatefulWidget {
   ///The widget that should be displayed in the [InViewNotifier].
   final ScrollView child;
 
-  ///The number of widget's contexts the InViewNotifier should stored/cached for
-  ///the calculations thats needed to be done to check if the widgets are inView or not.
-  ///Defaults to 10 and should be greater than 1. This is done to reduce the number of calculations being performed.
-  final int contextCacheCount;
-
   ///The distance from the bottom of the list where the [onListEndReached] should be invoked.
   final double endNotificationOffset;
 
@@ -43,13 +38,11 @@ class InViewNotifier extends StatefulWidget {
     Key? key,
     required this.child,
     this.initialInViewIds = const [],
-    this.contextCacheCount = 10,
     this.endNotificationOffset = 0.0,
     this.onListEndReached,
     this.throttleDuration = const Duration(milliseconds: 200),
     required this.isInViewPortCondition,
-  })  : assert(contextCacheCount >= 1),
-        assert(endNotificationOffset >= 0.0),
+  })  : assert(endNotificationOffset >= 0.0),
         scrollDirection = child.scrollDirection,
         super(key: key);
 
@@ -139,10 +132,6 @@ class _InViewNotifierState extends State<InViewNotifier> {
           //when user is not scrolling
           if (notification is UserScrollNotification &&
               notification.direction == ScrollDirection.idle) {
-            //Keeps only the last number contexts provided by user. This prevents overcalculation
-            //by iterating over non visible widget contexts in scroll listener
-            _inViewState!.removeContexts(widget.contextCacheCount);
-
             if (!_streamController!.isClosed && isScrollDirection) {
               _streamController!.add(notification);
             }
