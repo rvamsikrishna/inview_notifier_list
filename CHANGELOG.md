@@ -1,4 +1,16 @@
+## [3.0.0] - 28th December 2021.
+
+**Breaking Changes**
+
+- Removed the `contextCacheCount` property. The context will be auto cached and removed.
+
+- Fixed `Cannot get renderObject of inactive element.` issue. Thanks to [SteepSheep](https://github.com/SteepSheep)'s [PR](https://github.com/rvamsikrishna/inview_notifier_list/pull/45).
+
+- updated the video example to use latest plugin version.
+
 ## [2.0.0] - 5th June 2021.
+
+- Migrated to Null Safety.
 
 ## [1.0.0] - 3rd April 2020.
 

@@ -1,6 +1,6 @@
 # **inview_notifier_list**
 
-[![pub package](https://img.shields.io/badge/pub-v2.0.0-blue)](https://pub.dev/packages/inview_notifier_list)
+[![pub package](https://img.shields.io/badge/pub-v3.0.0-blue)](https://pub.dev/packages/inview_notifier_list)
 
 A Flutter package that builds a [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html) or [CustomScrollView](https://api.flutter.dev/flutter/widgets/CustomScrollView-class.html) and notifies when the widgets are on screen within a provided area.
 
@@ -33,7 +33,7 @@ Just add the package to your dependencies in the `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  inview_notifier_list: ^2.0.0
+  inview_notifier_list: ^3.0.0
 ```
 
 ## Basic Usage
@@ -175,21 +175,13 @@ Run the [example](https://github.com/rvamsikrishna/inview_notifier_list/tree/mas
 
 - `initialInViewIds`: The String list of unique ids of the child widgets that should be initialized as in-view when the list view is built for the first time.
 
-- `contextCacheCount`: The number of widget's contexts the `InViewNotifierList` should stored/cached for the calculations thats needed to be done to check if the widgets are in-view or not. Defaults to 10 and should be greater than 1. This is done to reduce the number of calculations being performed.
-
-  > If using a **InViewNotifierCustomScrollView** with a `SliverGrid` increase the `contextCacheCount` to more than number of grid items visible in the screen. See Custom Scroll View example in example folder.
-
 - `endNotificationOffset`: The distance from the bottom of the list where the `onListEndReached` should be invoked. Defaults to the end of the list i.e 0.0.
 
 - `onListEndReached`: The function that is invoked when the list scroll reaches the end or the `endNotificationOffset` if provided.
 
 - `throttleDuration`: The duration to be used for throttling the scroll notification. Defaults to 200 milliseconds.
 
-## Migration from v0.0.4 to v1.0.0
-
-- The `InViewNotifierList` uses an [IndexWidgetBuilder](https://api.flutter.dev/flutter/widgets/IndexedWidgetBuilder.html) instead of the `children` property just like the [ListView.builder](https://api.flutter.dev/flutter/widgets/ListView/ListView.builder.html). The rest all properties as same as the ListView.builder.
-
-- Previously you had to add the widget's `context` and its String `id` to the `InViewState` that you want to be notified whether it is in-view or not. Now you can directly make use of the `InViewNotifierWidget` to get notified if the required widget is currently in-view or not. Check the example provided.
+- `scrollDirection`: The axis along which the scroll view scrolls.
 
 ##### Credits:
 
