@@ -33,7 +33,7 @@ class VideoList extends StatelessWidget {
                       return VideoWidget(
                           play: isInView,
                           url:
-                              'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4');
+                              'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4');
                     },
                   );
                 },
