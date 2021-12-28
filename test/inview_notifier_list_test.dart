@@ -6,7 +6,8 @@ import '../example/lib/csv_example.dart';
 
 void main() {
   final TestWidgetsFlutterBinding binding =
-      TestWidgetsFlutterBinding.ensureInitialized() as TestWidgetsFlutterBinding;
+      TestWidgetsFlutterBinding.ensureInitialized()
+          as TestWidgetsFlutterBinding;
   group('test the inViewState', () {
     test('only n number of contexts are stored', () {
       final InViewState state = InViewState(
@@ -143,10 +144,12 @@ class ContianerByColorFinder extends MatchFinder {
     if (candidate.widget is Container) {
       final Container contianerWidget = candidate.widget as Container;
       if (contianerWidget.decoration is BoxDecoration) {
-        final BoxDecoration decoration = contianerWidget.decoration as BoxDecoration;
+        final BoxDecoration decoration =
+            contianerWidget.decoration as BoxDecoration;
         return decoration.color == color;
+      } else {
+        return contianerWidget.color == color;
       }
-      return false;
     }
     return false;
   }
