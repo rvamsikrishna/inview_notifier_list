@@ -13,6 +13,7 @@ void main() {
       final InViewState state = InViewState(
         intialIds: [],
         isInViewCondition: (doublex, double y, double z) => true,
+        scrollDirection: Axis.vertical,
       );
 
       state.addContext(context: null, id: '0');
@@ -54,19 +55,16 @@ void main() {
       );
     }
 
-    testWidgets(
-        'Only one container is green when halfway condition is provided',
+    testWidgets('Only one container is green when halfway condition is provided',
         (WidgetTester tester) async {
       final ScrollController controller = ScrollController();
-      IsInViewPortCondition condition =
-          (double deltaTop, double deltaBottom, double vpHeight) {
+      IsInViewPortCondition condition = (double deltaTop, double deltaBottom, double vpHeight) {
         return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
       };
 
       await binding.setSurfaceSize(Size(500, 800));
 
-      await _buildInViewNotifier(tester,
-          condition: condition, controller: controller);
+      await _buildInViewNotifier(tester, condition: condition, controller: controller);
 
       expect(ContianerByColorFinder(Colors.lightGreen), findsNothing);
       controller.jumpTo(600.0);
@@ -79,8 +77,7 @@ void main() {
         'Only 3 in grid containers are green when halfway condition is provided for CustomScrollView',
         (WidgetTester tester) async {
       final ScrollController controller = ScrollController();
-      IsInViewPortCondition condition =
-          (double deltaTop, double deltaBottom, double vpHeight) {
+      IsInViewPortCondition condition = (double deltaTop, double deltaBottom, double vpHeight) {
         return deltaTop < (0.5 * vpHeight) && deltaBottom > (0.5 * vpHeight);
       };
 
@@ -106,20 +103,16 @@ void main() {
       expect(ContianerByColorFinder(Colors.lightGreen), findsNWidgets(1));
     });
 
-    testWidgets(
-        'Two containera are green when condition with 200.0 height is provided',
+    testWidgets('Two containera are green when condition with 200.0 height is provided',
         (WidgetTester tester) async {
       final ScrollController controller = ScrollController();
-      IsInViewPortCondition condition =
-          (double deltaTop, double deltaBottom, double vpHeight) {
-        return deltaTop < (0.5 * vpHeight) + 100.0 &&
-            deltaBottom > (0.5 * vpHeight) - 100.0;
+      IsInViewPortCondition condition = (double deltaTop, double deltaBottom, double vpHeight) {
+        return deltaTop < (0.5 * vpHeight) + 100.0 && deltaBottom > (0.5 * vpHeight) - 100.0;
       };
 
       await binding.setSurfaceSize(Size(500, 800));
 
-      await _buildInViewNotifier(tester,
-          condition: condition, controller: controller);
+      await _buildInViewNotifier(tester, condition: condition, controller: controller);
 
       expect(ContianerByColorFinder(Colors.lightGreen), findsNothing);
       controller.jumpTo(380.0);

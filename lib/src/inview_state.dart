@@ -16,10 +16,14 @@ class InViewState extends ChangeNotifier {
   List<String> _currentInViewIds = [];
   final IsInViewPortCondition? _isInViewCondition;
 
+  final Axis _scrollDirection;
+
   InViewState(
       {required List<String> intialIds,
+      required Axis scrollDirection,
       bool Function(double, double, double)? isInViewCondition})
-      : _isInViewCondition = isInViewCondition {
+      : _scrollDirection = scrollDirection,
+        _isInViewCondition = isInViewCondition {
     _contexts = Set<WidgetData>();
     _currentInViewIds.addAll(intialIds);
   }
@@ -64,11 +68,9 @@ class InViewState extends ChangeNotifier {
       }
 
       //Retrieve the viewport related to the scroll area
-      final RenderAbstractViewport viewport =
-          RenderAbstractViewport.of(renderObject)!;
+      final RenderAbstractViewport viewport = RenderAbstractViewport.of(renderObject)!;
       final double vpHeight = notification.metrics.viewportDimension;
-      final RevealedOffset vpOffset =
-          viewport.getOffsetToReveal(renderObject, 0.0);
+      final RevealedOffset vpOffset = viewport.getOffsetToReveal(renderObject, 0.0);
 
       // Retrieve the dimensions of the item
       final Size size = renderObject.semanticBounds.size;
@@ -76,8 +78,9 @@ class InViewState extends ChangeNotifier {
       //distance from top of the widget to top of the viewport
       final double deltaTop = vpOffset.offset - notification.metrics.pixels;
 
+      final double itemDimension = _scrollDirection == Axis.vertical ? size.height : size.width;
       //distance from bottom of the widget to top of the viewport
-      final double deltaBottom = deltaTop + size.height;
+      final double deltaBottom = deltaTop + itemDimension;
       bool isInViewport = false;
 
       //Check if the item is in the viewport by evaluating the provided widget's isInViewPortCondition condition.
