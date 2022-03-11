@@ -1,4 +1,4 @@
-## [3.1.0] - 28th December 2021.
+## [3.1.0] - 11th March 2022.
 
 - Expose `InViewNotifier` to support customized `Widget` (e.g. `SmartRefresher`)
 - Add `InViewNotifier.of` to read `InViewState`
