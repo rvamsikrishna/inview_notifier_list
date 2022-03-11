@@ -1,3 +1,12 @@
+## [3.1.0] - 28th December 2021.
+
+- Expose `InViewNotifier` to support customized `Widget` (e.g. `SmartRefresher`)
+- Add `InViewNotifier.of` to read `InViewState`
+
+**Breaking Changes**
+
+- Remove `InViewNotifierList.of` and `InViewNotifierCustomScrollView.of`
+
 ## [3.0.0] - 28th December 2021.
 
 **Breaking Changes**

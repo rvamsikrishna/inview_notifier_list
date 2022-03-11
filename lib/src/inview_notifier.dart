@@ -44,11 +44,17 @@ class InViewNotifier extends StatefulWidget {
     this.scrollDirection = Axis.vertical,
     required this.isInViewPortCondition,
   })  : assert(endNotificationOffset >= 0.0),
-        // scrollDirection = child.scrollDirection,
         super(key: key);
 
   @override
   _InViewNotifierState createState() => _InViewNotifierState();
+
+  static InViewState? of(BuildContext context) {
+    final widget = context
+        .getElementForInheritedWidgetOfExactType<InheritedInViewWidget>()!
+        .widget as InheritedInViewWidget;
+    return widget.inViewState;
+  }
 }
 
 class _InViewNotifierState extends State<InViewNotifier> {
