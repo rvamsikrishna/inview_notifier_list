@@ -1,4 +1,5 @@
 import 'package:example/csv_example.dart';
+import 'package:example/refresh_list.dart';
 import 'package:flutter/material.dart';
 
 import 'my_list.dart';
@@ -27,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   final List<Tab> myTabs = <Tab>[
     Tab(text: 'Example 1'),
     Tab(text: 'Example 2'),
+    Tab(text: 'Refresh List'),
     Tab(text: 'Autoplay Video'),
     Tab(text: 'Custom Scroll View'),
   ];
@@ -41,6 +43,7 @@ class _HomePageState extends State<HomePage> {
           title: Text('ÍnViewNotifierList'),
           centerTitle: true,
           bottom: TabBar(
+            isScrollable: true,
             tabs: myTabs,
           ),
         ),
@@ -66,6 +69,7 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.redAccent.withOpacity(0.2),
               ),
             ),
+            RefreshList(),
             VideoList(),
             CSVExample(),
           ],

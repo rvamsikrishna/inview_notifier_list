@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inview_notifier_list/src/inview_notifier.dart';
 
-import 'inherited_inview_widget.dart';
 import 'inview_state.dart';
 
 ///builds a [ListView] and notifies when the widgets are on screen within a provided area.
@@ -34,6 +33,7 @@ class InViewNotifierList extends InViewNotifier {
           onListEndReached: onListEndReached,
           throttleDuration: throttleDuration,
           isInViewPortCondition: isInViewPortCondition,
+          scrollDirection: scrollDirection,
           child: ListView.builder(
             padding: padding,
             controller: controller,
@@ -47,13 +47,6 @@ class InViewNotifierList extends InViewNotifier {
             itemBuilder: builder,
           ),
         );
-
-  static InViewState? of(BuildContext context) {
-    final InheritedInViewWidget widget = context
-        .getElementForInheritedWidgetOfExactType<InheritedInViewWidget>()!
-        .widget as InheritedInViewWidget;
-    return widget.inViewState;
-  }
 }
 
 ///builds a [CustomScrollView] and notifies when the widgets are on screen within a provided area.
@@ -87,6 +80,7 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
           onListEndReached: onListEndReached,
           throttleDuration: throttleDuration,
           isInViewPortCondition: isInViewPortCondition,
+          scrollDirection: scrollDirection,
           child: CustomScrollView(
             slivers: slivers,
             anchor: anchor,
@@ -99,13 +93,6 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
             center: center,
           ),
         );
-
-  static InViewState? of(BuildContext context) {
-    final InheritedInViewWidget widget = context
-        .getElementForInheritedWidgetOfExactType<InheritedInViewWidget>()!
-        .widget as InheritedInViewWidget;
-    return widget.inViewState;
-  }
 }
 
 ///The widget that gets notified if it is currently inside the viewport condition
@@ -157,7 +144,7 @@ class _InViewNotifierWidgetState extends State<InViewNotifierWidget> {
   @override
   void initState() {
     super.initState();
-    state = InViewNotifierList.of(context)!;
+    state = InViewNotifier.of(context)!;
     state.addContext(context: context, id: widget.id);
   }
 
