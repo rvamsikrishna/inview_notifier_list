@@ -80,6 +80,7 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
     bool shrinkWrap = false,
     Key? center,
     double anchor = 0.0,
+    double? cacheExtent,
   }) : super(
           key: key,
           initialInViewIds: initialInViewIds,
@@ -97,6 +98,7 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
             primary: primary,
             shrinkWrap: shrinkWrap,
             center: center,
+            cacheExtent: cacheExtent,
           ),
         );
 
