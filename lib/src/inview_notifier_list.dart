@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:inview_notifier_list/src/inview_notifier.dart';
 
 import 'inherited_inview_widget.dart';
@@ -11,6 +13,7 @@ import 'inview_state.dart';
 class InViewNotifierList extends InViewNotifier {
   InViewNotifierList({
     Key? key,
+    Key? listViewBuilderKey,
     int? itemCount,
     required IndexedWidgetBuilder builder,
     List<String> initialInViewIds = const [],
@@ -26,6 +29,19 @@ class InViewNotifierList extends InViewNotifier {
     bool? primary,
     bool shrinkWrap = false,
     bool addAutomaticKeepAlives = true,
+    double? itemExtent,
+    ItemExtentBuilder? itemExtentBuilder,
+    Widget? prototypeItem,
+    int? Function(Key)? findChildIndexCallback,
+    bool addRepaintBoundaries = true,
+    bool addSemanticIndexes = true,
+    double? cacheExtent,
+    int? semanticChildCount,
+    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
+    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
+        ScrollViewKeyboardDismissBehavior.manual,
+    String? restorationId,
+    Clip clipBehavior = Clip.hardEdge,
   })  : assert(endNotificationOffset >= 0.0),
         super(
           key: key,
@@ -35,6 +51,7 @@ class InViewNotifierList extends InViewNotifier {
           throttleDuration: throttleDuration,
           isInViewPortCondition: isInViewPortCondition,
           child: ListView.builder(
+            key: listViewBuilderKey,
             padding: padding,
             controller: controller,
             scrollDirection: scrollDirection,
@@ -42,10 +59,50 @@ class InViewNotifierList extends InViewNotifier {
             reverse: reverse,
             primary: primary,
             addAutomaticKeepAlives: addAutomaticKeepAlives,
+            addRepaintBoundaries: addRepaintBoundaries,
+            addSemanticIndexes: addSemanticIndexes,
             shrinkWrap: shrinkWrap,
             itemCount: itemCount,
             itemBuilder: builder,
+            itemExtent: itemExtent,
+            itemExtentBuilder: itemExtentBuilder,
+            cacheExtent: cacheExtent,
+            semanticChildCount: semanticChildCount,
+            dragStartBehavior: dragStartBehavior,
+            keyboardDismissBehavior: keyboardDismissBehavior,
+            restorationId: restorationId,
+            clipBehavior: clipBehavior,
+            findChildIndexCallback: findChildIndexCallback,
+            prototypeItem: prototypeItem,
           ),
+        );
+
+  static InViewState? of(BuildContext context) {
+    final InheritedInViewWidget widget = context
+        .getElementForInheritedWidgetOfExactType<InheritedInViewWidget>()!
+        .widget as InheritedInViewWidget;
+    return widget.inViewState;
+  }
+}
+
+class InViewNotifierListCustom extends InViewNotifier {
+  InViewNotifierListCustom({
+    Key? key,
+    List<String> initialInViewIds = const [],
+    double endNotificationOffset = 0.0,
+    VoidCallback? onListEndReached,
+    Duration throttleDuration = const Duration(milliseconds: 200),
+    required IsInViewPortCondition isInViewPortCondition,
+    required ListView listViewCustom,
+  })  : assert(endNotificationOffset >= 0.0),
+        super(
+          key: key,
+          initialInViewIds: initialInViewIds,
+          endNotificationOffset: endNotificationOffset,
+          onListEndReached: onListEndReached,
+          throttleDuration: throttleDuration,
+          isInViewPortCondition: isInViewPortCondition,
+          child: listViewCustom,
         );
 
   static InViewState? of(BuildContext context) {
@@ -80,6 +137,15 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
     bool shrinkWrap = false,
     Key? center,
     double anchor = 0.0,
+    Key? customScrollViewKey,
+    ScrollBehavior? scrollBehavior,
+    double? cacheExtent,
+    int? semanticChildCount,
+    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
+    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
+        ScrollViewKeyboardDismissBehavior.manual,
+    String? restorationId,
+    Clip clipBehavior = Clip.hardEdge,
   }) : super(
           key: key,
           initialInViewIds: initialInViewIds,
@@ -88,6 +154,7 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
           throttleDuration: throttleDuration,
           isInViewPortCondition: isInViewPortCondition,
           child: CustomScrollView(
+            key: customScrollViewKey,
             slivers: slivers,
             anchor: anchor,
             controller: controller,
@@ -97,6 +164,13 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
             primary: primary,
             shrinkWrap: shrinkWrap,
             center: center,
+            keyboardDismissBehavior: keyboardDismissBehavior,
+            dragStartBehavior: dragStartBehavior,
+            restorationId: restorationId,
+            cacheExtent: cacheExtent,
+            semanticChildCount: semanticChildCount,
+            clipBehavior: clipBehavior,
+            scrollBehavior: scrollBehavior,
           ),
         );
 
