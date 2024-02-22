@@ -5,7 +5,7 @@
 A Flutter package that builds a [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html) or [CustomScrollView](https://api.flutter.dev/flutter/widgets/CustomScrollView-class.html) and notifies when the widgets are on screen within a provided area.
 
 |                                                            Example 1                                                             |                                                              Example 2                                                              |                                                     Example 3(Auto-play video)                                                      |
-| :------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
+|:--------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------:|
 | ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/31307345/59602739-2f022d00-9125-11e9-84ef-19a33f8bd782.gif) | ![ezgif com-video-to-gif (1)](https://user-images.githubusercontent.com/31307345/59602740-2f022d00-9125-11e9-8ee6-044e44f6048f.gif) | ![ezgif com-video-to-gif (2)](https://user-images.githubusercontent.com/31307345/59602744-2f9ac380-9125-11e9-8a8f-7e68bdc27c16.gif) |
 |                                                **Example 4(Custom Scroll View)**                                                 |                                                                                                                                     |                                                                                                                                     |
 |       ![csv_example](https://user-images.githubusercontent.com/31307345/78342587-22b56680-75b7-11ea-8f6e-22a8f378546d.gif)       |                                                                                                                                     |                                                                                                                                     |
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: InViewNotifierList(
-		...
+		/// ...
       ),
     );
   }
