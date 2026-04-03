@@ -10,15 +10,15 @@ import 'inview_state.dart';
 ///It's just like the [ListView.builder].
 class InViewNotifierList extends InViewNotifier {
   InViewNotifierList({
-    Key? key,
+    super.key,
     int? itemCount,
     required IndexedWidgetBuilder builder,
-    List<String> initialInViewIds = const [],
-    double endNotificationOffset = 0.0,
-    VoidCallback? onListEndReached,
-    Duration throttleDuration = const Duration(milliseconds: 200),
+    super.initialInViewIds,
+    super.endNotificationOffset,
+    super.onListEndReached,
+    super.throttleDuration,
     Axis scrollDirection = Axis.vertical,
-    required IsInViewPortCondition isInViewPortCondition,
+    required super.isInViewPortCondition,
     ScrollController? controller,
     EdgeInsets? padding,
     ScrollPhysics? physics,
@@ -28,12 +28,6 @@ class InViewNotifierList extends InViewNotifier {
     bool addAutomaticKeepAlives = true,
   })  : assert(endNotificationOffset >= 0.0),
         super(
-          key: key,
-          initialInViewIds: initialInViewIds,
-          endNotificationOffset: endNotificationOffset,
-          onListEndReached: onListEndReached,
-          throttleDuration: throttleDuration,
-          isInViewPortCondition: isInViewPortCondition,
           child: ListView.builder(
             padding: padding,
             controller: controller,
@@ -65,14 +59,14 @@ class InViewNotifierList extends InViewNotifier {
 
 class InViewNotifierCustomScrollView extends InViewNotifier {
   InViewNotifierCustomScrollView({
-    Key? key,
+    super.key,
     required List<Widget> slivers,
-    List<String> initialInViewIds = const [],
-    double endNotificationOffset = 0.0,
-    VoidCallback? onListEndReached,
-    Duration throttleDuration = const Duration(milliseconds: 200),
+    super.initialInViewIds,
+    super.endNotificationOffset,
+    super.onListEndReached,
+    super.throttleDuration,
     Axis scrollDirection = Axis.vertical,
-    required IsInViewPortCondition isInViewPortCondition,
+    required super.isInViewPortCondition,
     ScrollController? controller,
     ScrollPhysics? physics,
     bool reverse = false,
@@ -81,12 +75,6 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
     Key? center,
     double anchor = 0.0,
   }) : super(
-          key: key,
-          initialInViewIds: initialInViewIds,
-          endNotificationOffset: endNotificationOffset,
-          onListEndReached: onListEndReached,
-          throttleDuration: throttleDuration,
-          isInViewPortCondition: isInViewPortCondition,
           child: CustomScrollView(
             slivers: slivers,
             anchor: anchor,
@@ -141,14 +129,14 @@ class InViewNotifierWidget extends StatefulWidget {
   final Widget? child;
 
   const InViewNotifierWidget({
-    Key? key,
+    super.key,
     required this.id,
     required this.builder,
     this.child,
-  }) : super(key: key);
+  });
 
   @override
-  _InViewNotifierWidgetState createState() => _InViewNotifierWidgetState();
+  State<InViewNotifierWidget> createState() => _InViewNotifierWidgetState();
 }
 
 class _InViewNotifierWidgetState extends State<InViewNotifierWidget> {
@@ -178,16 +166,13 @@ class _InViewNotifierWidgetState extends State<InViewNotifierWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: AnimatedBuilder(
-        animation: state,
-        child: widget.child,
-        builder: (BuildContext context, Widget? child) {
-          final bool isInView = state.inView(widget.id);
-
-          return widget.builder(context, isInView, child);
-        },
-      ),
+    return AnimatedBuilder(
+      animation: state,
+      child: widget.child,
+      builder: (BuildContext context, Widget? child) {
+        final bool isInView = state.inView(widget.id);
+        return widget.builder(context, isInView, child);
+      },
     );
   }
 }
@@ -198,7 +183,7 @@ class _InViewNotifierWidgetState extends State<InViewNotifierWidget> {
 ///The `isInView` tells whether the returned widget is in view or not.
 ///
 ///The child should typically be part of the returned widget tree.
-typedef Widget InViewNotifierWidgetBuilder(
+typedef InViewNotifierWidgetBuilder = Widget Function(
   BuildContext context,
   bool isInView,
   Widget? child,

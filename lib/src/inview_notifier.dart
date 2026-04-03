@@ -35,7 +35,7 @@ class InViewNotifier extends StatefulWidget {
   final IsInViewPortCondition isInViewPortCondition;
 
   InViewNotifier({
-    Key? key,
+    super.key,
     required this.child,
     this.initialInViewIds = const [],
     this.endNotificationOffset = 0.0,
@@ -43,11 +43,10 @@ class InViewNotifier extends StatefulWidget {
     this.throttleDuration = const Duration(milliseconds: 200),
     required this.isInViewPortCondition,
   })  : assert(endNotificationOffset >= 0.0),
-        scrollDirection = child.scrollDirection,
-        super(key: key);
+        scrollDirection = child.scrollDirection;
 
   @override
-  _InViewNotifierState createState() => _InViewNotifierState();
+  State<InViewNotifier> createState() => _InViewNotifierState();
 }
 
 class _InViewNotifierState extends State<InViewNotifier> {
@@ -103,21 +102,16 @@ class _InViewNotifierState extends State<InViewNotifier> {
       child: NotificationListener<ScrollNotification>(
         child: widget.child,
         onNotification: (ScrollNotification notification) {
-          late bool isScrollDirection;
-          //the direction of user scroll up, down, left, right.
           final AxisDirection scrollDirection =
               notification.metrics.axisDirection;
 
-          switch (widget.scrollDirection) {
-            case Axis.vertical:
-              isScrollDirection = scrollDirection == AxisDirection.down ||
-                  scrollDirection == AxisDirection.up;
-              break;
-            case Axis.horizontal:
-              isScrollDirection = scrollDirection == AxisDirection.left ||
-                  scrollDirection == AxisDirection.right;
-              break;
-          }
+          final bool isScrollDirection = switch (widget.scrollDirection) {
+            Axis.vertical => scrollDirection == AxisDirection.down ||
+                scrollDirection == AxisDirection.up,
+            Axis.horizontal => scrollDirection == AxisDirection.left ||
+                scrollDirection == AxisDirection.right,
+          };
+
           final double maxScroll = notification.metrics.maxScrollExtent;
 
           //end of the listview reached
@@ -149,7 +143,7 @@ class _InViewNotifierState extends State<InViewNotifier> {
 
 ///The function that defines the area within which the widgets should be notified
 ///as inView.
-typedef bool IsInViewPortCondition(
+typedef IsInViewPortCondition = bool Function(
   double deltaTop,
   double deltaBottom,
   double viewPortDimension,

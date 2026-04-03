@@ -13,14 +13,14 @@ class InViewState extends ChangeNotifier {
 
   ///The String id's of the widgets in the listview that the user expects a
   ///notification whether it is in-view or not. This helps to make recognition easy.
-  List<String> _currentInViewIds = [];
+  final List<String> _currentInViewIds = [];
   final IsInViewPortCondition? _isInViewCondition;
 
   InViewState(
       {required List<String> intialIds,
       bool Function(double, double, double)? isInViewCondition})
       : _isInViewCondition = isInViewCondition {
-    _contexts = Set<WidgetData>();
+    _contexts = <WidgetData>{};
     _currentInViewIds.addAll(intialIds);
   }
 
@@ -54,18 +54,18 @@ class InViewState extends ChangeNotifier {
   void onScroll(ScrollNotification notification) {
     // Iterate through each item to check
     // whether it is in the viewport
-    _contexts.forEach((WidgetData item) {
+    for (final WidgetData item in _contexts) {
       // Retrieve the RenderObject, linked to a specific item
       final RenderObject? renderObject = item.context!.findRenderObject();
 
       // If none was to be found, or if not attached, leave by now
       if (renderObject == null || !renderObject.attached) {
-        return;
+        continue;
       }
 
       //Retrieve the viewport related to the scroll area
       final RenderAbstractViewport viewport =
-          RenderAbstractViewport.of(renderObject)!;
+          RenderAbstractViewport.of(renderObject);
       final double vpHeight = notification.metrics.viewportDimension;
       final RevealedOffset vpOffset =
           viewport.getOffsetToReveal(renderObject, 0.0);
@@ -95,6 +95,6 @@ class InViewState extends ChangeNotifier {
           notifyListeners();
         }
       }
-    });
+    }
   }
 }
