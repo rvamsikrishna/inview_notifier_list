@@ -1,6 +1,7 @@
 # **inview_notifier_list**
 
-[![pub package](https://img.shields.io/badge/pub-v3.0.0-blue)](https://pub.dev/packages/inview_notifier_list)
+[![pub package](https://img.shields.io/pub/v/inview_notifier_list.svg)](https://pub.dev/packages/inview_notifier_list)
+[![CI](https://github.com/rvamsikrishna/inview_notifier_list/actions/workflows/ci.yml/badge.svg)](https://github.com/rvamsikrishna/inview_notifier_list/actions/workflows/ci.yml)
 
 A Flutter package that builds a [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html) or [CustomScrollView](https://api.flutter.dev/flutter/widgets/CustomScrollView-class.html) and notifies when the widgets are on screen within a provided area.
 
@@ -33,7 +34,7 @@ Just add the package to your dependencies in the `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  inview_notifier_list: ^3.0.0
+  inview_notifier_list: ^4.0.0
 ```
 
 ## Basic Usage
@@ -64,7 +65,7 @@ class MyApp extends StatelessWidget {
 Add the [required](https://api.flutter.dev/flutter/meta/required-constant.html) property `isInViewPortCondition` to the `InViewNotifierList` widget. This is the function that defines the area which the widgets overlap should be notified as currently in-view.
 
 ```dart
-typedef bool IsInViewPortCondition(
+typedef IsInViewPortCondition = bool Function(
   double deltaTop,
   double deltaBottom,
   double viewPortDimension,
