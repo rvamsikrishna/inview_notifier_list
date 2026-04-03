@@ -2,6 +2,7 @@
 
 [![pub package](https://img.shields.io/pub/v/inview_notifier_list.svg)](https://pub.dev/packages/inview_notifier_list)
 [![CI](https://github.com/rvamsikrishna/inview_notifier_list/actions/workflows/ci.yml/badge.svg)](https://github.com/rvamsikrishna/inview_notifier_list/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/rvamsikrishna/inview_notifier_list/branch/master/graph/badge.svg)](https://codecov.io/gh/rvamsikrishna/inview_notifier_list)
 
 A Flutter package that builds a [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html) or [CustomScrollView](https://api.flutter.dev/flutter/widgets/CustomScrollView-class.html) and notifies when the widgets are on screen within a provided area.
 
