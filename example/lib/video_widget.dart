@@ -5,10 +5,9 @@ class VideoWidget extends StatefulWidget {
   final String url;
   final bool play;
 
-  const VideoWidget({Key? key, required this.url, required this.play})
-      : super(key: key);
+  const VideoWidget({super.key, required this.url, required this.play});
   @override
-  _VideoWidgetState createState() => _VideoWidgetState();
+  State<VideoWidget> createState() => _VideoWidgetState();
 }
 
 class _VideoWidgetState extends State<VideoWidget> {
@@ -18,7 +17,7 @@ class _VideoWidgetState extends State<VideoWidget> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.url);
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url));
     _initializeVideoPlayerFuture = _controller.initialize().then((_) {
       // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
       setState(() {});
@@ -57,7 +56,7 @@ class _VideoWidgetState extends State<VideoWidget> {
         if (snapshot.connectionState == ConnectionState.done) {
           return VideoPlayer(_controller);
         } else {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
