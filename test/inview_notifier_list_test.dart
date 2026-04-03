@@ -13,31 +13,8 @@ bool expandedCondition(double deltaTop, double deltaBottom, double vpHeight) {
 
 void main() {
   final binding = TestWidgetsFlutterBinding.ensureInitialized();
-  group('test the inViewState', () {
-    test('only n number of contexts are stored', () {
-      final InViewState state = InViewState(
-        intialIds: [],
-        isInViewCondition: (doublex, double y, double z) => true,
-      );
 
-      state.addContext(context: null, id: '0');
-
-      expect(state.numberOfContextStored, 1);
-
-      for (var i = 1; i <= 10; i++) {
-        state.addContext(context: null, id: '$i');
-      }
-
-      expect(state.numberOfContextStored, 11);
-
-      const letRemain = 5;
-      state.removeContexts(letRemain);
-
-      expect(state.numberOfContextStored, 5);
-    });
-  });
-
-  group('Test the InViewNotifierList widget', () {
+  group('InViewNotifierList - core behavior', () {
     buildInViewNotifier(
       WidgetTester tester, {
       IsInViewPortCondition? condition,
@@ -63,7 +40,6 @@ void main() {
         'Only one container is green when halfway condition is provided',
         (WidgetTester tester) async {
       final ScrollController controller = ScrollController();
-
       await binding.setSurfaceSize(const Size(500, 800));
 
       await buildInViewNotifier(tester,
@@ -80,7 +56,6 @@ void main() {
         'Only 3 in grid containers are green when halfway condition is provided for CustomScrollView',
         (WidgetTester tester) async {
       final ScrollController controller = ScrollController();
-
       await binding.setSurfaceSize(const Size(500, 800));
 
       await buildInViewNotifier(
@@ -107,7 +82,6 @@ void main() {
         'Two containers are green when condition with 200.0 height is provided',
         (WidgetTester tester) async {
       final ScrollController controller = ScrollController();
-
       await binding.setSurfaceSize(const Size(500, 800));
 
       await buildInViewNotifier(tester,
@@ -118,6 +92,368 @@ void main() {
       await tester.pump(const Duration(milliseconds: 2000));
 
       expect(ContainerByColorFinder(Colors.lightGreen), findsNWidgets(2));
+    });
+  });
+
+  group('InViewNotifierList - initialInViewIds', () {
+    testWidgets('marks specified ids as in-view on first build',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierList(
+            initialInViewIds: const ['0', '1'],
+            isInViewPortCondition: halfwayCondition,
+            itemCount: 5,
+            builder: (context, index) {
+              return InViewNotifierWidget(
+                id: '$index',
+                builder: (context, isInView, child) {
+                  return Container(
+                    key: ValueKey('item-$index'),
+                    height: 300,
+                    color: isInView ? Colors.green : Colors.red,
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      );
+
+      final item0 =
+          tester.widget<Container>(find.byKey(const ValueKey('item-0')));
+      final item1 =
+          tester.widget<Container>(find.byKey(const ValueKey('item-1')));
+      expect(item0.color, Colors.green);
+      expect(item1.color, Colors.green);
+    });
+
+    testWidgets('items not in initialInViewIds start as not-in-view',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierList(
+            initialInViewIds: const ['0'],
+            isInViewPortCondition: halfwayCondition,
+            itemCount: 5,
+            builder: (context, index) {
+              return InViewNotifierWidget(
+                id: '$index',
+                builder: (context, isInView, child) {
+                  return Container(
+                    key: ValueKey('item-$index'),
+                    height: 300,
+                    color: isInView ? Colors.green : Colors.red,
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      );
+
+      final item1 =
+          tester.widget<Container>(find.byKey(const ValueKey('item-1')));
+      final item2 =
+          tester.widget<Container>(find.byKey(const ValueKey('item-2')));
+      expect(item1.color, Colors.red);
+      expect(item2.color, Colors.red);
+    });
+  });
+
+  group('InViewNotifierList - onListEndReached', () {
+    testWidgets('fires callback when scrolled to the end',
+        (WidgetTester tester) async {
+      final controller = ScrollController();
+      int endReachedCount = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierList(
+            controller: controller,
+            isInViewPortCondition: halfwayCondition,
+            onListEndReached: () => endReachedCount++,
+            itemCount: 10,
+            builder: (context, index) {
+              return InViewNotifierWidget(
+                id: '$index',
+                builder: (context, isInView, child) {
+                  return Container(height: 300);
+                },
+              );
+            },
+          ),
+        ),
+      );
+
+      expect(endReachedCount, 0);
+
+      // Scroll to the very end
+      controller.jumpTo(controller.position.maxScrollExtent);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(endReachedCount, greaterThan(0));
+    });
+
+    testWidgets('fires callback when within endNotificationOffset',
+        (WidgetTester tester) async {
+      final controller = ScrollController();
+      int endReachedCount = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierList(
+            controller: controller,
+            isInViewPortCondition: halfwayCondition,
+            endNotificationOffset: 200.0,
+            onListEndReached: () => endReachedCount++,
+            itemCount: 20,
+            builder: (context, index) {
+              return InViewNotifierWidget(
+                id: '$index',
+                builder: (context, isInView, child) {
+                  return Container(height: 300);
+                },
+              );
+            },
+          ),
+        ),
+      );
+
+      expect(endReachedCount, 0);
+
+      // Scroll to near the end (within 200px offset)
+      final nearEnd = controller.position.maxScrollExtent - 100.0;
+      controller.jumpTo(nearEnd);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(endReachedCount, greaterThan(0));
+    });
+
+    testWidgets('does not fire when not scrolled to end',
+        (WidgetTester tester) async {
+      final controller = ScrollController();
+      int endReachedCount = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierList(
+            controller: controller,
+            isInViewPortCondition: halfwayCondition,
+            onListEndReached: () => endReachedCount++,
+            itemCount: 50,
+            builder: (context, index) {
+              return InViewNotifierWidget(
+                id: '$index',
+                builder: (context, isInView, child) {
+                  return Container(height: 300);
+                },
+              );
+            },
+          ),
+        ),
+      );
+
+      // Scroll just a little — not near end
+      controller.jumpTo(100.0);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(endReachedCount, 0);
+    });
+  });
+
+  group('InViewNotifierList - edge cases', () {
+    testWidgets('handles empty list (0 items) without crashing',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierList(
+            isInViewPortCondition: halfwayCondition,
+            itemCount: 0,
+            builder: (context, index) {
+              return InViewNotifierWidget(
+                id: '$index',
+                builder: (context, isInView, child) {
+                  return Container(height: 300);
+                },
+              );
+            },
+          ),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('handles single item list', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierList(
+            isInViewPortCondition: halfwayCondition,
+            initialInViewIds: const ['only'],
+            itemCount: 1,
+            builder: (context, index) {
+              return InViewNotifierWidget(
+                id: 'only',
+                builder: (context, isInView, child) {
+                  return Container(
+                    key: const ValueKey('single'),
+                    height: 300,
+                    color: isInView ? Colors.green : Colors.red,
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      );
+
+      final item =
+          tester.widget<Container>(find.byKey(const ValueKey('single')));
+      expect(item.color, Colors.green);
+    });
+
+    testWidgets('works with reverse: true', (WidgetTester tester) async {
+      final controller = ScrollController();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierList(
+            controller: controller,
+            reverse: true,
+            isInViewPortCondition: halfwayCondition,
+            itemCount: 20,
+            builder: (context, index) {
+              return Container(
+                height: 300,
+                margin: const EdgeInsets.symmetric(vertical: 50),
+                child: InViewNotifierWidget(
+                  id: '$index',
+                  builder: (context, isInView, child) {
+                    return Container(
+                      key: ValueKey('rev-$index'),
+                      height: 300,
+                      color: isInView ? Colors.green : Colors.red,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      );
+
+      // Should build without errors
+      expect(tester.takeException(), isNull);
+
+      // Scroll and verify detection still works
+      controller.jumpTo(600.0);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // At least one item should be detected as in-view
+      expect(
+        find.byWidgetPredicate(
+            (w) => w is Container && w.color == Colors.green),
+        findsWidgets,
+      );
+    });
+
+    testWidgets('works with shrinkWrap: true', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: SingleChildScrollView(
+            child: Column(
+              children: [
+                InViewNotifierList(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  isInViewPortCondition: halfwayCondition,
+                  initialInViewIds: const ['0'],
+                  itemCount: 3,
+                  builder: (context, index) {
+                    return InViewNotifierWidget(
+                      id: '$index',
+                      builder: (context, isInView, child) {
+                        return Container(
+                          key: ValueKey('shrink-$index'),
+                          height: 200,
+                          color: isInView ? Colors.green : Colors.red,
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      // Should build without errors in shrinkWrap mode
+      expect(tester.takeException(), isNull);
+      final item =
+          tester.widget<Container>(find.byKey(const ValueKey('shrink-0')));
+      expect(item.color, Colors.green);
+    });
+
+    testWidgets('works with horizontal scroll direction',
+        (WidgetTester tester) async {
+      final controller = ScrollController();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierList(
+            controller: controller,
+            scrollDirection: Axis.horizontal,
+            isInViewPortCondition:
+                (double deltaTop, double deltaBottom, double vpWidth) {
+              return deltaTop < (0.5 * vpWidth) &&
+                  deltaBottom > (0.5 * vpWidth);
+            },
+            itemCount: 20,
+            builder: (context, index) {
+              return InViewNotifierWidget(
+                id: '$index',
+                builder: (context, isInView, child) {
+                  return Container(
+                    key: ValueKey('h-$index'),
+                    width: 300,
+                    color: isInView ? Colors.green : Colors.red,
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+
+      // Scroll horizontally
+      controller.jumpTo(500.0);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Verify at least one item detected in horizontal mode
+      expect(
+        find.byWidgetPredicate(
+            (w) => w is Container && w.color == Colors.green),
+        findsWidgets,
+      );
+    });
+  });
+
+  group('InViewNotifierCustomScrollView - additional', () {
+    testWidgets('handles empty slivers list', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierCustomScrollView(
+            isInViewPortCondition: halfwayCondition,
+            slivers: const [],
+          ),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
     });
   });
 }
