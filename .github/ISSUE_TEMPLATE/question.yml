@@ -1,0 +1,28 @@
+name: Question
+description: Ask a question about usage or behavior
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question about how to use the package? Ask away!
+
+        Before asking, please check:
+        - [README](https://github.com/rvamsikrishna/inview_notifier_list#readme)
+        - [API docs](https://pub.dev/documentation/inview_notifier_list/latest/)
+        - [Example app](https://github.com/rvamsikrishna/inview_notifier_list/tree/master/example)
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: What would you like to know?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What are you building? Share relevant code if it helps explain the question.
+      render: dart

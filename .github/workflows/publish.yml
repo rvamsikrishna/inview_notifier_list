@@ -1,0 +1,77 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  # Gate: CI must pass first
+  ci:
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
+
+  publish:
+    needs: ci
+    runs-on: ubuntu-latest
+    # Only publish when the version in pubspec.yaml has actually changed
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      should_publish: ${{ steps.check.outputs.should_publish }}
+
+    permissions:
+      id-token: write # Required for pub.dev OIDC authentication
+      contents: write # Required for creating GitHub releases
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for tag comparison
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Extract version from pubspec.yaml
+        id: version
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Detected version: $VERSION"
+
+      - name: Check if version tag already exists
+        id: check
+        run: |
+          if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "Tag v${{ steps.version.outputs.version }} already exists — skipping publish."
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Tag v${{ steps.version.outputs.version }} does not exist — will publish."
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install dependencies
+        if: steps.check.outputs.should_publish == 'true'
+        run: flutter pub get
+
+      - name: Publish to pub.dev
+        if: steps.check.outputs.should_publish == 'true'
+        run: dart pub publish --force
+
+      - name: Extract changelog for this version
+        if: steps.check.outputs.should_publish == 'true'
+        id: changelog
+        run: |
+          # Extract the changelog section for the current version
+          VERSION="${{ steps.version.outputs.version }}"
+          CHANGELOG=$(awk "/^## \[$VERSION\]/{found=1; next} /^## \[/{if(found) exit} found{print}" CHANGELOG.md)
+          # Write to file to avoid escaping issues
+          echo "$CHANGELOG" > /tmp/release_notes.md
+
+      - name: Create GitHub Release
+        if: steps.check.outputs.should_publish == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: v${{ steps.version.outputs.version }}
+          body_path: /tmp/release_notes.md
+          generate_release_notes: false

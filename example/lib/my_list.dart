@@ -11,13 +11,13 @@ class MyList extends StatelessWidget {
   final ScrollController? controller;
 
   const MyList({
-    Key? key,
+    super.key,
     this.itemsLength = 30,
     this.inViewPortCondition,
     this.inViewArea,
     this.initialInViewIds = const [],
     this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

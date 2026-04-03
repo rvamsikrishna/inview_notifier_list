@@ -4,6 +4,8 @@ import 'package:inview_notifier_list/inview_notifier_list.dart';
 import 'video_widget.dart';
 
 class VideoList extends StatelessWidget {
+  const VideoList({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Stack(

@@ -4,27 +4,31 @@ import 'package:flutter/material.dart';
 import 'my_list.dart';
 import 'video_list.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Container(
         color: Colors.grey.shade300,
-        child: HomePage(),
+        child: const HomePage(),
       ),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Tab> myTabs = <Tab>[
+  final List<Tab> myTabs = const <Tab>[
     Tab(text: 'Example 1'),
     Tab(text: 'Example 2'),
     Tab(text: 'Autoplay Video'),
@@ -38,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: Colors.grey.shade300,
         appBar: AppBar(
-          title: Text('ÍnViewNotifierList'),
+          title: const Text('InViewNotifierList'),
           centerTitle: true,
           bottom: TabBar(
             tabs: myTabs,
@@ -46,16 +50,16 @@ class _HomePageState extends State<HomePage> {
         ),
         body: TabBarView(
           children: <Widget>[
-            MyList(
+            const MyList(
               key: ValueKey("list1"),
               initialInViewIds: ['0'],
-              inViewArea: Container(
+              inViewArea: SizedBox(
                 height: 1.0,
-                color: Colors.redAccent,
+                child: ColoredBox(color: Colors.redAccent),
               ),
             ),
             MyList(
-              initialInViewIds: ['0'],
+              initialInViewIds: const ['0'],
               inViewPortCondition:
                   (double deltaTop, double deltaBottom, double vpHeight) {
                 return (deltaTop < (0.5 * vpHeight) + 100.0 &&
@@ -63,10 +67,10 @@ class _HomePageState extends State<HomePage> {
               },
               inViewArea: Container(
                 height: 200.0,
-                color: Colors.redAccent.withOpacity(0.2),
+                color: Colors.redAccent.withValues(alpha: 0.2),
               ),
             ),
-            VideoList(),
+            const VideoList(),
             CSVExample(),
           ],
         ),

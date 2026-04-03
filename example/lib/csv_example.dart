@@ -7,8 +7,8 @@ class CSVExample extends StatelessWidget {
   final ScrollController? scrollController;
   final IsInViewPortCondition? inViewPortCondition;
 
-  const CSVExample({Key? key, this.scrollController, this.inViewPortCondition})
-      : super(key: key);
+  const CSVExample(
+      {super.key, this.scrollController, this.inViewPortCondition});
   @override
   Widget build(BuildContext context) {
     final IsInViewPortCondition condition = inViewPortCondition ??

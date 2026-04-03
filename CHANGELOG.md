@@ -1,3 +1,34 @@
+## [4.0.0] - 3rd April 2026.
+
+**Breaking Changes**
+
+- **Minimum SDK**: Dart `>=3.0.0`, Flutter `>=3.10.0`. Dropped Dart 2.x support.
+
+**Fixes & Improvements**
+
+- Fixed `InheritedInViewWidget` redeclaring `child` field from `ProxyWidget` (compile error on Dart 3.x).
+- Removed unnecessary `!` on `RenderAbstractViewport.of()` (now returns non-nullable in Flutter 3.x).
+- Modernized `typedef` syntax to generic function type aliases.
+- Replaced `switch`/`break` with Dart 3 switch expression for scroll direction.
+- Removed unnecessary `Container` wrapper in `InViewNotifierWidget`.
+- Adopted `super.key` and super parameters across all widget constructors.
+- Replaced Travis CI with GitHub Actions with Codecov integration.
+- Added `analysis_options.yaml` with `flutter_lints`.
+
+**Tests**
+
+- Comprehensive test suite: 4 → 27 tests covering all public APIs.
+- Tests are now self-contained (no longer import from the example app).
+- Added coverage for: `initialInViewIds`, `onListEndReached`, `endNotificationOffset`, `throttleDuration` changes, `didUpdateWidget` id re-registration, `dispose` cleanup, `child` optimization, horizontal scroll, `reverse`, `shrinkWrap`, and `notifyListeners` dedup.
+- 92.8% code coverage.
+
+**Example App**
+
+- Regenerated Android/iOS/web native scaffolding for Flutter 3.x.
+- Updated `TextTheme.headline4` (removed) to `headlineSmall`.
+- Updated `VideoPlayerController.network()` (deprecated) to `.networkUrl()`.
+- Updated `Color.withOpacity()` (deprecated) to `.withValues(alpha:)`.
+
 ## [3.0.0] - 28th December 2021.
 
 **Breaking Changes**
