@@ -13,14 +13,10 @@ jobs:
   publish:
     needs: ci
     runs-on: ubuntu-latest
-    # Only publish when the version in pubspec.yaml has actually changed
-    outputs:
-      version: ${{ steps.version.outputs.version }}
-      should_publish: ${{ steps.check.outputs.should_publish }}
 
     permissions:
       id-token: write # Required for pub.dev OIDC authentication
-      contents: write # Required for creating GitHub releases
+      contents: write # Required for creating GitHub releases and tags
 
     steps:
       - uses: actions/checkout@v4
@@ -53,6 +49,13 @@ jobs:
         if: steps.check.outputs.should_publish == 'true'
         run: flutter pub get
 
+      # Create tag BEFORE publish — pub.dev OIDC validates against the tag pattern v{{version}}
+      - name: Create version tag
+        if: steps.check.outputs.should_publish == 'true'
+        run: |
+          git tag "v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
+
       - name: Publish to pub.dev
         if: steps.check.outputs.should_publish == 'true'
         run: dart pub publish --force
@@ -61,10 +64,8 @@ jobs:
         if: steps.check.outputs.should_publish == 'true'
         id: changelog
         run: |
-          # Extract the changelog section for the current version
           VERSION="${{ steps.version.outputs.version }}"
           CHANGELOG=$(awk "/^## \[$VERSION\]/{found=1; next} /^## \[/{if(found) exit} found{print}" CHANGELOG.md)
-          # Write to file to avoid escaping issues
           echo "$CHANGELOG" > /tmp/release_notes.md
 
       - name: Create GitHub Release
