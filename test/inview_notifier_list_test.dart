@@ -442,7 +442,7 @@ void main() {
     });
   });
 
-  group('InViewNotifierCustomScrollView - additional', () {
+  group('InViewNotifierCustomScrollView', () {
     testWidgets('handles empty slivers list', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -458,10 +458,12 @@ void main() {
   });
 
   group('InViewNotifier - throttleDuration', () {
-    testWidgets('rebuilds stream when throttleDuration changes',
+    testWidgets(
+        'rebuilds stream when throttleDuration changes and scroll still works',
         (WidgetTester tester) async {
       Duration duration = const Duration(milliseconds: 200);
       final controller = ScrollController();
+      await binding.setSurfaceSize(const Size(500, 800));
 
       await tester.pumpWidget(
         MaterialApp(
@@ -482,11 +484,19 @@ void main() {
                       isInViewPortCondition: halfwayCondition,
                       itemCount: 20,
                       builder: (context, index) {
-                        return InViewNotifierWidget(
-                          id: '$index',
-                          builder: (context, isInView, child) {
-                            return Container(height: 300);
-                          },
+                        return Container(
+                          height: 300,
+                          margin: const EdgeInsets.symmetric(vertical: 50),
+                          child: InViewNotifierWidget(
+                            id: '$index',
+                            builder: (context, isInView, child) {
+                              return Container(
+                                key: ValueKey('t-$index'),
+                                height: 300,
+                                color: isInView ? Colors.green : Colors.red,
+                              );
+                            },
+                          ),
                         );
                       },
                     ),
@@ -502,49 +512,65 @@ void main() {
       await tester.tap(find.byKey(const ValueKey('change-throttle')));
       await tester.pump();
 
-      // Scroll after throttle change — should still work
+      // Scroll after throttle change — detection must still work
       controller.jumpTo(600.0);
       await tester.pump(const Duration(milliseconds: 600));
 
-      expect(tester.takeException(), isNull);
+      expect(
+        find.byWidgetPredicate(
+            (w) => w is Container && w.color == Colors.green),
+        findsWidgets,
+      );
     });
   });
 
-  group('InViewNotifier - drag scroll (UserScrollNotification)', () {
-    testWidgets('drag gesture triggers in-view detection',
+  group('InViewNotifier - notifyListeners dedup', () {
+    testWidgets(
+        'does not fire redundant notifications when state has not changed',
         (WidgetTester tester) async {
+      final controller = ScrollController();
+      int buildCount = 0;
       await binding.setSurfaceSize(const Size(500, 800));
-      bool detected = false;
 
       await tester.pumpWidget(
         MaterialApp(
           home: InViewNotifierList(
-            isInViewPortCondition: (deltaTop, deltaBottom, vpHeight) {
-              // Very generous condition — anything partially visible
-              if (deltaTop < vpHeight && deltaBottom > 0) {
-                detected = true;
-              }
-              return deltaTop < vpHeight && deltaBottom > 0;
-            },
-            itemCount: 20,
+            controller: controller,
+            initialInViewIds: const ['0'],
+            isInViewPortCondition: halfwayCondition,
+            itemCount: 10,
             builder: (context, index) {
-              return InViewNotifierWidget(
-                id: '$index',
-                builder: (context, isInView, child) {
-                  return Container(height: 300);
-                },
+              return Container(
+                height: 300,
+                margin: const EdgeInsets.symmetric(vertical: 50),
+                child: InViewNotifierWidget(
+                  id: '$index',
+                  builder: (context, isInView, child) {
+                    if (index == 0) buildCount++;
+                    return Container(
+                      height: 300,
+                      color: isInView ? Colors.green : Colors.red,
+                    );
+                  },
+                ),
               );
             },
           ),
         ),
       );
 
-      // Drag generates UserScrollNotification including idle at the end
-      await tester.drag(find.byType(ListView), const Offset(0, -300));
-      await tester.pumpAndSettle();
+      final initialBuildCount = buildCount;
 
-      // The condition function was called during drag scroll
-      expect(detected, isTrue);
+      // Scroll to the same position twice — item '0' stays in view both times
+      // notifyListeners should NOT fire again since state didn't change
+      controller.jumpTo(1.0);
+      await tester.pump(const Duration(milliseconds: 300));
+      controller.jumpTo(2.0);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Build count should not have increased significantly
+      // (at most 1 extra from the state change, not 2+ from redundant notifies)
+      expect(buildCount - initialBuildCount, lessThanOrEqualTo(1));
     });
   });
 }

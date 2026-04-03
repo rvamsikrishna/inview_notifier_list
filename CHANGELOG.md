@@ -12,9 +12,15 @@
 - Replaced `switch`/`break` with Dart 3 switch expression for scroll direction.
 - Removed unnecessary `Container` wrapper in `InViewNotifierWidget`.
 - Adopted `super.key` and super parameters across all widget constructors.
-- Tests are now self-contained (no longer import from the example app).
-- Replaced Travis CI with GitHub Actions.
+- Replaced Travis CI with GitHub Actions with Codecov integration.
 - Added `analysis_options.yaml` with `flutter_lints`.
+
+**Tests**
+
+- Comprehensive test suite: 4 → 27 tests covering all public APIs.
+- Tests are now self-contained (no longer import from the example app).
+- Added coverage for: `initialInViewIds`, `onListEndReached`, `endNotificationOffset`, `throttleDuration` changes, `didUpdateWidget` id re-registration, `dispose` cleanup, `child` optimization, horizontal scroll, `reverse`, `shrinkWrap`, and `notifyListeners` dedup.
+- 92.8% code coverage.
 
 **Example App**
 

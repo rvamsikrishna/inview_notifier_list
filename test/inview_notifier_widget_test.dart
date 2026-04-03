@@ -30,7 +30,6 @@ void main() {
         ),
       );
 
-      // Item '0' should be in-view via initialInViewIds
       final box0 =
           tester.widget<Container>(find.byKey(const ValueKey('box-0')));
       expect(box0.color, Colors.green);
@@ -106,7 +105,7 @@ void main() {
       expect(updatedBox.color, Colors.red);
     });
 
-    testWidgets('dispose removes context without crashing',
+    testWidgets('dispose removes context without crashing on subsequent scroll',
         (WidgetTester tester) async {
       final controller = ScrollController();
       bool showWidget = true;
@@ -149,12 +148,12 @@ void main() {
       await tester.tap(find.byKey(const ValueKey('toggle')));
       await tester.pump();
 
-      // If dispose didn't properly clean up, scrolling would crash
-      // on stale contexts. Just verify no exception.
+      // If dispose didn't properly clean up, this would crash
+      // on stale contexts (the v3.0.0 bug)
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('child parameter is passed through to builder',
+    testWidgets('child parameter is passed through to builder for optimization',
         (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -181,13 +180,12 @@ void main() {
         ),
       );
 
-      // The pre-built child should be present in the tree
       expect(find.text('pre-built child'), findsOneWidget);
       expect(find.text('in'), findsOneWidget);
     });
   });
 
-  group('InViewNotifierWidget with scrolling', () {
+  group('InViewNotifierWidget scroll transitions', () {
     testWidgets('widget transitions from not-in-view to in-view on scroll',
         (WidgetTester tester) async {
       final controller = ScrollController();
