@@ -456,6 +456,97 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   });
+
+  group('InViewNotifier - throttleDuration', () {
+    testWidgets('rebuilds stream when throttleDuration changes',
+        (WidgetTester tester) async {
+      Duration duration = const Duration(milliseconds: 200);
+      final controller = ScrollController();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                children: [
+                  ElevatedButton(
+                    key: const ValueKey('change-throttle'),
+                    onPressed: () => setState(
+                        () => duration = const Duration(milliseconds: 500)),
+                    child: const Text('Change'),
+                  ),
+                  Expanded(
+                    child: InViewNotifierList(
+                      controller: controller,
+                      throttleDuration: duration,
+                      isInViewPortCondition: halfwayCondition,
+                      itemCount: 20,
+                      builder: (context, index) {
+                        return InViewNotifierWidget(
+                          id: '$index',
+                          builder: (context, isInView, child) {
+                            return Container(height: 300);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+
+      // Change throttleDuration — triggers didUpdateWidget
+      await tester.tap(find.byKey(const ValueKey('change-throttle')));
+      await tester.pump();
+
+      // Scroll after throttle change — should still work
+      controller.jumpTo(600.0);
+      await tester.pump(const Duration(milliseconds: 600));
+
+      expect(tester.takeException(), isNull);
+    });
+  });
+
+  group('InViewNotifier - drag scroll (UserScrollNotification)', () {
+    testWidgets('drag gesture triggers in-view detection',
+        (WidgetTester tester) async {
+      await binding.setSurfaceSize(const Size(500, 800));
+      bool detected = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierList(
+            isInViewPortCondition: (deltaTop, deltaBottom, vpHeight) {
+              // Very generous condition — anything partially visible
+              if (deltaTop < vpHeight && deltaBottom > 0) {
+                detected = true;
+              }
+              return deltaTop < vpHeight && deltaBottom > 0;
+            },
+            itemCount: 20,
+            builder: (context, index) {
+              return InViewNotifierWidget(
+                id: '$index',
+                builder: (context, isInView, child) {
+                  return Container(height: 300);
+                },
+              );
+            },
+          ),
+        ),
+      );
+
+      // Drag generates UserScrollNotification including idle at the end
+      await tester.drag(find.byType(ListView), const Offset(0, -300));
+      await tester.pumpAndSettle();
+
+      // The condition function was called during drag scroll
+      expect(detected, isTrue);
+    });
+  });
 }
 
 // ---------------------------------------------------------------------------

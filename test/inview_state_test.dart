@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
+import 'package:inview_notifier_list/src/widget_data.dart';
 
 void main() {
   group('InViewState', () {
@@ -196,6 +197,14 @@ void main() {
           throwsA(isA<FlutterError>()),
         );
       });
+    });
+  });
+
+  group('WidgetData', () {
+    test('toString includes id', () {
+      final data = WidgetData(context: null, id: 'test-id');
+      final result = data.toString();
+      expect(result, contains('id=test-id'));
     });
   });
 }
