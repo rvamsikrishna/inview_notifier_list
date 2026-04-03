@@ -5,6 +5,7 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  workflow_call: # Allows publish.yml to reuse this workflow
 
 jobs:
   analyze-and-test:
