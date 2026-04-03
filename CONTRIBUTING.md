@@ -75,13 +75,13 @@ flutter test
 
 All tests must pass. If you're adding new behavior, add tests for it.
 
-### Coverage (Optional)
+### Coverage
 
 ```bash
 flutter test --coverage
 ```
 
-Coverage should not decrease from the current baseline. Don't write tests just to increase a number — write tests that catch real bugs.
+**CI enforces a minimum of 90% code coverage.** PRs that drop coverage below this threshold will fail the CI check and cannot be merged. That said, don't write tests just to increase a number — write tests that catch real bugs.
 
 ## Code Style
 

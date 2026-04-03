@@ -29,6 +29,22 @@ jobs:
       - name: Run tests
         run: flutter test --coverage
 
+      - name: Enforce minimum 90% coverage
+        run: |
+          TOTAL_LINES=$(grep -c '^DA:' coverage/lcov.info || echo 0)
+          HIT_LINES=$(grep '^DA:' coverage/lcov.info | grep -v ',0$' | wc -l)
+          if [ "$TOTAL_LINES" -eq 0 ]; then
+            echo "No coverage data found."
+            exit 1
+          fi
+          COVERAGE=$((HIT_LINES * 100 / TOTAL_LINES))
+          echo "Coverage: $HIT_LINES/$TOTAL_LINES ($COVERAGE%)"
+          if [ "$COVERAGE" -lt 90 ]; then
+            echo "::error::Coverage ($COVERAGE%) is below the 90% minimum threshold."
+            exit 1
+          fi
+          echo "Coverage check passed."
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:

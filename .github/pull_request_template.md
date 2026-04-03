@@ -20,4 +20,5 @@
 - [ ] `dart analyze --fatal-infos` reports no issues
 - [ ] I've added tests that prove my fix or feature works
 - [ ] All existing tests pass (`flutter test`)
+- [ ] Test coverage is at or above 90% (`flutter test --coverage`)
 - [ ] I've updated `CHANGELOG.md` (if user-facing change)
