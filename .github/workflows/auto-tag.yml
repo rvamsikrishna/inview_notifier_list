@@ -1,0 +1,40 @@
+name: Auto-tag on version bump
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  # Gate: CI must pass first
+  ci:
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
+
+  tag:
+    needs: ci
+    runs-on: ubuntu-latest
+
+    steps:
+      # PAT is required — tags pushed via GITHUB_TOKEN don't trigger other workflows
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          fetch-depth: 0
+
+      - name: Extract version from pubspec.yaml
+        id: version
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Detected version: $VERSION"
+
+      - name: Create and push tag if new version
+        run: |
+          TAG="v${{ steps.version.outputs.version }}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists — skipping."
+          else
+            git tag "$TAG"
+            git push origin "$TAG"
+            echo "Created and pushed tag $TAG"
+          fi
