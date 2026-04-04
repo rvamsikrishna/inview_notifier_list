@@ -1,4 +1,4 @@
-## [4.0.0] - 3rd April 2026.
+## [4.0.0] - 4th April 2026.
 
 **Breaking Changes**
 
