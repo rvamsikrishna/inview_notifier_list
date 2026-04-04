@@ -457,6 +457,62 @@ void main() {
     });
   });
 
+  group('InViewNotifierList - scrollViewWrapper', () {
+    testWidgets('in-view detection works through a wrapper widget',
+        (WidgetTester tester) async {
+      final controller = ScrollController();
+      await binding.setSurfaceSize(const Size(500, 800));
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierList(
+            controller: controller,
+            isInViewPortCondition: halfwayCondition,
+            scrollViewWrapper: (scrollView) {
+              // Simulates a refresh widget wrapping the scroll view.
+              return ColoredBox(
+                color: Colors.transparent,
+                child: scrollView,
+              );
+            },
+            itemCount: 30,
+            builder: (context, index) {
+              return Container(
+                width: double.infinity,
+                height: 300.0,
+                color: Colors.blueGrey,
+                alignment: Alignment.center,
+                margin: const EdgeInsets.symmetric(vertical: 50.0),
+                child: InViewNotifierWidget(
+                  id: '$index',
+                  builder: (context, isInView, child) {
+                    return Container(
+                      key: ValueKey('w-$index'),
+                      height: 250.0,
+                      color: isInView ? Colors.green : Colors.red,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      );
+
+      // Scroll so that an item crosses the midpoint
+      controller.jumpTo(600.0);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Detection should work despite the wrapper between
+      // NotificationListener and the ListView
+      expect(
+        find.byWidgetPredicate(
+            (w) => w is Container && w.color == Colors.green),
+        findsOneWidget,
+      );
+    });
+  });
+
   group('InViewNotifierCustomScrollView', () {
     testWidgets('handles empty slivers list', (WidgetTester tester) async {
       await tester.pumpWidget(

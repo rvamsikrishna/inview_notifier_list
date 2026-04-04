@@ -10,6 +10,9 @@ import 'inview_state.dart';
 ///The constructor takes an [IndexedWidgetBuilder] which builds the children on demand.
 ///It's just like the [ListView.builder].
 class InViewNotifierList extends InViewNotifier {
+  // scrollDirection is intentionally not a super parameter — it is used both
+  // for super.scrollDirection and to configure the inner ListView.
+  // ignore: use_super_parameters
   InViewNotifierList({
     super.key,
     int? itemCount,
@@ -39,30 +42,35 @@ class InViewNotifierList extends InViewNotifier {
         ScrollViewKeyboardDismissBehavior.manual,
     String? restorationId,
     Clip clipBehavior = Clip.hardEdge,
+    ScrollViewWrapper? scrollViewWrapper,
   })  : assert(endNotificationOffset >= 0.0),
         super(
-          child: ListView.builder(
-            padding: padding,
-            controller: controller,
-            scrollDirection: scrollDirection,
-            physics: physics,
-            reverse: reverse,
-            primary: primary,
-            addAutomaticKeepAlives: addAutomaticKeepAlives,
-            addRepaintBoundaries: addRepaintBoundaries,
-            addSemanticIndexes: addSemanticIndexes,
-            shrinkWrap: shrinkWrap,
-            itemCount: itemCount,
-            itemBuilder: builder,
-            itemExtent: itemExtent,
-            prototypeItem: prototypeItem,
-            findChildIndexCallback: findChildIndexCallback,
-            cacheExtent: cacheExtent,
-            semanticChildCount: semanticChildCount,
-            dragStartBehavior: dragStartBehavior,
-            keyboardDismissBehavior: keyboardDismissBehavior,
-            restorationId: restorationId,
-            clipBehavior: clipBehavior,
+          scrollDirection: scrollDirection,
+          child: _applyWrapper(
+            scrollViewWrapper,
+            ListView.builder(
+              padding: padding,
+              controller: controller,
+              scrollDirection: scrollDirection,
+              physics: physics,
+              reverse: reverse,
+              primary: primary,
+              addAutomaticKeepAlives: addAutomaticKeepAlives,
+              addRepaintBoundaries: addRepaintBoundaries,
+              addSemanticIndexes: addSemanticIndexes,
+              shrinkWrap: shrinkWrap,
+              itemCount: itemCount,
+              itemBuilder: builder,
+              itemExtent: itemExtent,
+              prototypeItem: prototypeItem,
+              findChildIndexCallback: findChildIndexCallback,
+              cacheExtent: cacheExtent,
+              semanticChildCount: semanticChildCount,
+              dragStartBehavior: dragStartBehavior,
+              keyboardDismissBehavior: keyboardDismissBehavior,
+              restorationId: restorationId,
+              clipBehavior: clipBehavior,
+            ),
           ),
         );
 
@@ -71,6 +79,10 @@ class InViewNotifierList extends InViewNotifier {
         .getElementForInheritedWidgetOfExactType<InheritedInViewWidget>()!
         .widget as InheritedInViewWidget;
     return widget.inViewState;
+  }
+
+  static Widget _applyWrapper(ScrollViewWrapper? wrapper, Widget scrollView) {
+    return wrapper != null ? wrapper(scrollView) : scrollView;
   }
 }
 
@@ -82,6 +94,9 @@ class InViewNotifierList extends InViewNotifier {
 ///three slivers: [SliverAppBar], [SliverList], and [SliverGrid].
 
 class InViewNotifierCustomScrollView extends InViewNotifier {
+  // scrollDirection is intentionally not a super parameter — it is used both
+  // for super.scrollDirection and to configure the inner CustomScrollView.
+  // ignore: use_super_parameters
   InViewNotifierCustomScrollView({
     super.key,
     required List<Widget> slivers,
@@ -106,24 +121,29 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
         ScrollViewKeyboardDismissBehavior.manual,
     String? restorationId,
     Clip clipBehavior = Clip.hardEdge,
+    ScrollViewWrapper? scrollViewWrapper,
   }) : super(
-          child: CustomScrollView(
-            slivers: slivers,
-            anchor: anchor,
-            controller: controller,
-            scrollDirection: scrollDirection,
-            physics: physics,
-            scrollBehavior: scrollBehavior,
-            reverse: reverse,
-            primary: primary,
-            shrinkWrap: shrinkWrap,
-            center: center,
-            cacheExtent: cacheExtent,
-            semanticChildCount: semanticChildCount,
-            dragStartBehavior: dragStartBehavior,
-            keyboardDismissBehavior: keyboardDismissBehavior,
-            restorationId: restorationId,
-            clipBehavior: clipBehavior,
+          scrollDirection: scrollDirection,
+          child: _applyWrapper(
+            scrollViewWrapper,
+            CustomScrollView(
+              slivers: slivers,
+              anchor: anchor,
+              controller: controller,
+              scrollDirection: scrollDirection,
+              physics: physics,
+              scrollBehavior: scrollBehavior,
+              reverse: reverse,
+              primary: primary,
+              shrinkWrap: shrinkWrap,
+              center: center,
+              cacheExtent: cacheExtent,
+              semanticChildCount: semanticChildCount,
+              dragStartBehavior: dragStartBehavior,
+              keyboardDismissBehavior: keyboardDismissBehavior,
+              restorationId: restorationId,
+              clipBehavior: clipBehavior,
+            ),
           ),
         );
 
@@ -132,6 +152,10 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
         .getElementForInheritedWidgetOfExactType<InheritedInViewWidget>()!
         .widget as InheritedInViewWidget;
     return widget.inViewState;
+  }
+
+  static Widget _applyWrapper(ScrollViewWrapper? wrapper, Widget scrollView) {
+    return wrapper != null ? wrapper(scrollView) : scrollView;
   }
 }
 

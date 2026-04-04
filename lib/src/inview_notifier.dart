@@ -14,7 +14,11 @@ class InViewNotifier extends StatefulWidget {
   final List<String> initialInViewIds;
 
   ///The widget that should be displayed in the [InViewNotifier].
-  final ScrollView child;
+  ///
+  ///This is typically a [ScrollView] (e.g. [ListView], [CustomScrollView]),
+  ///but can be any widget when a [ScrollViewWrapper] is used to wrap
+  ///the scroll view with additional functionality like pull-to-refresh.
+  final Widget child;
 
   ///The distance from the bottom of the list where the [onListEndReached] should be invoked.
   final double endNotificationOffset;
@@ -34,16 +38,16 @@ class InViewNotifier extends StatefulWidget {
   ///as inView.
   final IsInViewPortCondition isInViewPortCondition;
 
-  InViewNotifier({
+  const InViewNotifier({
     super.key,
     required this.child,
     this.initialInViewIds = const [],
     this.endNotificationOffset = 0.0,
     this.onListEndReached,
     this.throttleDuration = const Duration(milliseconds: 200),
+    this.scrollDirection = Axis.vertical,
     required this.isInViewPortCondition,
-  })  : assert(endNotificationOffset >= 0.0),
-        scrollDirection = child.scrollDirection;
+  });
 
   @override
   State<InViewNotifier> createState() => _InViewNotifierState();
@@ -149,3 +153,30 @@ typedef IsInViewPortCondition = bool Function(
   double deltaBottom,
   double viewPortDimension,
 );
+
+///A function that wraps the internal [ScrollView] with an additional widget.
+///
+///This is useful for adding pull-to-refresh, shimmer wrappers, or any other
+///widget that needs to sit between the [NotificationListener] and the
+///[ScrollView].
+///
+///The [scrollView] parameter is the fully constructed [ScrollView] created
+///internally by [InViewNotifierList] or [InViewNotifierCustomScrollView].
+///
+///Example with a pull-to-refresh library:
+///```dart
+///InViewNotifierList(
+///  scrollViewWrapper: (scrollView) => SmartRefresher(
+///    controller: refreshController,
+///    child: scrollView,
+///  ),
+///  // ...
+///)
+///```
+///
+///**Important:** The wrapper must allow [ScrollNotification] events to bubble
+///up from the inner scroll view. Most widgets do this by default. If the
+///wrapper provides its own [ScrollController], ensure it does not conflict
+///with the [ScrollController] passed to [InViewNotifierList] — managing
+///scroll controller ownership is the caller's responsibility.
+typedef ScrollViewWrapper = Widget Function(Widget scrollView);
