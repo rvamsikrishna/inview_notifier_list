@@ -92,6 +92,7 @@ class _InViewNotifierState extends State<InViewNotifier> {
     _inViewState = InViewState(
       intialIds: widget.initialInViewIds,
       isInViewCondition: widget.isInViewPortCondition,
+      scrollDirection: widget.scrollDirection,
     );
   }
 

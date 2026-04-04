@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:inview_notifier_list/src/inview_notifier.dart';
 
@@ -26,6 +27,18 @@ class InViewNotifierList extends InViewNotifier {
     bool? primary,
     bool shrinkWrap = false,
     bool addAutomaticKeepAlives = true,
+    bool addRepaintBoundaries = true,
+    bool addSemanticIndexes = true,
+    double? itemExtent,
+    Widget? prototypeItem,
+    ChildIndexGetter? findChildIndexCallback,
+    double? cacheExtent,
+    int? semanticChildCount,
+    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
+    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
+        ScrollViewKeyboardDismissBehavior.manual,
+    String? restorationId,
+    Clip clipBehavior = Clip.hardEdge,
   })  : assert(endNotificationOffset >= 0.0),
         super(
           child: ListView.builder(
@@ -36,9 +49,20 @@ class InViewNotifierList extends InViewNotifier {
             reverse: reverse,
             primary: primary,
             addAutomaticKeepAlives: addAutomaticKeepAlives,
+            addRepaintBoundaries: addRepaintBoundaries,
+            addSemanticIndexes: addSemanticIndexes,
             shrinkWrap: shrinkWrap,
             itemCount: itemCount,
             itemBuilder: builder,
+            itemExtent: itemExtent,
+            prototypeItem: prototypeItem,
+            findChildIndexCallback: findChildIndexCallback,
+            cacheExtent: cacheExtent,
+            semanticChildCount: semanticChildCount,
+            dragStartBehavior: dragStartBehavior,
+            keyboardDismissBehavior: keyboardDismissBehavior,
+            restorationId: restorationId,
+            clipBehavior: clipBehavior,
           ),
         );
 
@@ -69,11 +93,19 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
     required super.isInViewPortCondition,
     ScrollController? controller,
     ScrollPhysics? physics,
+    ScrollBehavior? scrollBehavior,
     bool reverse = false,
     bool? primary,
     bool shrinkWrap = false,
     Key? center,
     double anchor = 0.0,
+    double? cacheExtent,
+    int? semanticChildCount,
+    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
+    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
+        ScrollViewKeyboardDismissBehavior.manual,
+    String? restorationId,
+    Clip clipBehavior = Clip.hardEdge,
   }) : super(
           child: CustomScrollView(
             slivers: slivers,
@@ -81,10 +113,17 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
             controller: controller,
             scrollDirection: scrollDirection,
             physics: physics,
+            scrollBehavior: scrollBehavior,
             reverse: reverse,
             primary: primary,
             shrinkWrap: shrinkWrap,
             center: center,
+            cacheExtent: cacheExtent,
+            semanticChildCount: semanticChildCount,
+            dragStartBehavior: dragStartBehavior,
+            keyboardDismissBehavior: keyboardDismissBehavior,
+            restorationId: restorationId,
+            clipBehavior: clipBehavior,
           ),
         );
 

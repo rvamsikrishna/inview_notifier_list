@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:inview_notifier_list/inview_notifier_list.dart';
 
@@ -6,6 +7,7 @@ void main() {
     group('constructor and initialInViewIds', () {
       test('initializes with provided ids marked as in-view', () {
         final state = InViewState(
+          scrollDirection: Axis.vertical,
           intialIds: ['a', 'b', 'c'],
           isInViewCondition: (dt, db, vp) => true,
         );
@@ -21,6 +23,7 @@ void main() {
     group('addContext', () {
       test('adds a new context', () {
         final state = InViewState(
+          scrollDirection: Axis.vertical,
           intialIds: [],
           isInViewCondition: (dt, db, vp) => true,
         );
@@ -31,6 +34,7 @@ void main() {
 
       test('replaces context when same id is added again (dedup)', () {
         final state = InViewState(
+          scrollDirection: Axis.vertical,
           intialIds: [],
           isInViewCondition: (dt, db, vp) => true,
         );
@@ -46,6 +50,7 @@ void main() {
     group('removeContexts', () {
       test('trims contexts to the specified remaining count', () {
         final state = InViewState(
+          scrollDirection: Axis.vertical,
           intialIds: [],
           isInViewCondition: (dt, db, vp) => true,
         );
@@ -62,6 +67,7 @@ void main() {
 
       test('does nothing when letRemain >= current count', () {
         final state = InViewState(
+          scrollDirection: Axis.vertical,
           intialIds: [],
           isInViewCondition: (dt, db, vp) => true,
         );

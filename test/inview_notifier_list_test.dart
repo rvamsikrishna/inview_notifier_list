@@ -399,46 +399,61 @@ void main() {
     testWidgets('works with horizontal scroll direction',
         (WidgetTester tester) async {
       final controller = ScrollController();
+      await binding.setSurfaceSize(const Size(800, 500));
 
       await tester.pumpWidget(
         MaterialApp(
-          home: InViewNotifierList(
-            controller: controller,
-            scrollDirection: Axis.horizontal,
-            isInViewPortCondition:
-                (double deltaTop, double deltaBottom, double vpWidth) {
-              return deltaTop < (0.5 * vpWidth) &&
-                  deltaBottom > (0.5 * vpWidth);
-            },
-            itemCount: 20,
-            builder: (context, index) {
-              return InViewNotifierWidget(
-                id: '$index',
-                builder: (context, isInView, child) {
-                  return Container(
-                    key: ValueKey('h-$index'),
-                    width: 300,
-                    color: isInView ? Colors.green : Colors.red,
-                  );
-                },
-              );
-            },
+          home: SizedBox(
+            height: 500,
+            child: InViewNotifierList(
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              isInViewPortCondition:
+                  (double deltaTop, double deltaBottom, double vpWidth) {
+                return deltaTop < (0.5 * vpWidth) &&
+                    deltaBottom > (0.5 * vpWidth);
+              },
+              itemCount: 20,
+              builder: (context, index) {
+                return InViewNotifierWidget(
+                  id: '$index',
+                  builder: (context, isInView, child) {
+                    return Container(
+                      key: ValueKey('h-$index'),
+                      width: 300,
+                      height: 500,
+                      color: isInView ? Colors.green : Colors.red,
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ),
       );
 
       expect(tester.takeException(), isNull);
 
-      // Scroll horizontally
-      controller.jumpTo(500.0);
+      // Each item is 300px wide. Viewport is 800px, midpoint at 400px.
+      // At offset 500: item 1 spans [−200, 100], item 2 spans [100, 400],
+      // item 3 spans [400, 700] — only item 2 straddles the midpoint
+      // (deltaTop=100 < 400, deltaBottom=400 is NOT > 400).
+      // So we need an offset where exactly one item straddles the midpoint.
+      // At offset 450: item 2 spans [150, 450] — deltaTop=150 < 400, deltaBottom=450 > 400. In-view.
+      //                item 1 spans [−150, 150] — deltaBottom=150, NOT > 400.
+      //                item 3 spans [450, 750] — deltaTop=450, NOT < 400.
+      controller.jumpTo(450.0);
       await tester.pump(const Duration(milliseconds: 300));
 
-      // Verify at least one item detected in horizontal mode
-      expect(
-        find.byWidgetPredicate(
-            (w) => w is Container && w.color == Colors.green),
-        findsWidgets,
-      );
+      // Exactly one item should be detected as in-view
+      final item2 = tester.widget<Container>(find.byKey(const ValueKey('h-2')));
+      expect(item2.color, Colors.green);
+
+      // Neighboring items should NOT be in-view
+      final item1 = tester.widget<Container>(find.byKey(const ValueKey('h-1')));
+      final item3 = tester.widget<Container>(find.byKey(const ValueKey('h-3')));
+      expect(item1.color, Colors.red);
+      expect(item3.color, Colors.red);
     });
   });
 

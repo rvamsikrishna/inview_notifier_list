@@ -1,3 +1,18 @@
+## [4.0.1] - 4th April 2026.
+
+**Fixes**
+
+- Fixed `deltaBottom` using `size.height` instead of `size.width` for horizontal scroll lists, causing incorrect in-view detection. ([#35](https://github.com/rvamsikrishna/inview_notifier_list/issues/35), [#40](https://github.com/rvamsikrishna/inview_notifier_list/issues/40)) — thanks to [@AlexanderFarkas](https://github.com/AlexanderFarkas) for identifying the fix in [#37](https://github.com/rvamsikrishna/inview_notifier_list/pull/37).
+
+**Features**
+
+- Exposed remaining `ListView.builder` properties: `cacheExtent`, `itemExtent`, `prototypeItem`, `findChildIndexCallback`, `addRepaintBoundaries`, `addSemanticIndexes`, `semanticChildCount`, `dragStartBehavior`, `keyboardDismissBehavior`, `restorationId`, `clipBehavior`. ([#43](https://github.com/rvamsikrishna/inview_notifier_list/issues/43), [#36](https://github.com/rvamsikrishna/inview_notifier_list/issues/36)) — thanks to [@nqhhdev](https://github.com/nqhhdev) for the initial work in [#60](https://github.com/rvamsikrishna/inview_notifier_list/pull/60).
+- Exposed remaining `CustomScrollView` properties: `cacheExtent`, `scrollBehavior`, `semanticChildCount`, `dragStartBehavior`, `keyboardDismissBehavior`, `restorationId`, `clipBehavior`.
+
+**Example App**
+
+- Added horizontal scroll example tab.
+
 ## [4.0.0] - 4th April 2026.
 
 **Breaking Changes**
