@@ -19,7 +19,7 @@ class InViewState extends ChangeNotifier {
 
   InViewState(
       {required List<String> intialIds,
-      required Axis scrollDirection,
+      Axis scrollDirection = Axis.vertical,
       bool Function(double, double, double)? isInViewCondition})
       : _isInViewCondition = isInViewCondition,
         _scrollDirection = scrollDirection {
