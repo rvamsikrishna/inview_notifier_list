@@ -2,8 +2,7 @@ name: Publish to pub.dev
 
 on:
   push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+    branches: [master]
 
 jobs:
   # Gate: CI must pass first
@@ -17,10 +16,12 @@ jobs:
 
     permissions:
       id-token: write # Required for pub.dev OIDC authentication
-      contents: write # Required for creating GitHub releases
+      contents: write # Required for creating tags and GitHub releases
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: dart-lang/setup-dart@v1
 
@@ -28,19 +29,40 @@ jobs:
         with:
           channel: stable
 
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Publish to pub.dev
-        run: dart pub publish --force
-
-      - name: Extract version from tag
+      - name: Extract version from pubspec.yaml
         id: version
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}')
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Detected version: $VERSION"
+
+      - name: Check if version tag already exists
+        id: check
+        run: |
+          if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "Tag v${{ steps.version.outputs.version }} already exists — skipping publish."
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Tag v${{ steps.version.outputs.version }} does not exist — will publish."
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install dependencies
+        if: steps.check.outputs.should_publish == 'true'
+        run: flutter pub get
+
+      - name: Create version tag
+        if: steps.check.outputs.should_publish == 'true'
+        run: |
+          git tag "v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
+
+      - name: Publish to pub.dev
+        if: steps.check.outputs.should_publish == 'true'
+        run: dart pub publish --force
 
       - name: Extract changelog for this version
+        if: steps.check.outputs.should_publish == 'true'
         id: changelog
         run: |
           VERSION="${{ steps.version.outputs.version }}"
@@ -48,9 +70,10 @@ jobs:
           echo "$CHANGELOG" > /tmp/release_notes.md
 
       - name: Create GitHub Release
+        if: steps.check.outputs.should_publish == 'true'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
+          tag_name: v${{ steps.version.outputs.version }}
+          name: v${{ steps.version.outputs.version }}
           body_path: /tmp/release_notes.md
           generate_release_notes: false
