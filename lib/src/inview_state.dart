@@ -15,11 +15,14 @@ class InViewState extends ChangeNotifier {
   ///notification whether it is in-view or not. This helps to make recognition easy.
   final List<String> _currentInViewIds = [];
   final IsInViewPortCondition? _isInViewCondition;
+  final Axis _scrollDirection;
 
   InViewState(
       {required List<String> intialIds,
+      required Axis scrollDirection,
       bool Function(double, double, double)? isInViewCondition})
-      : _isInViewCondition = isInViewCondition {
+      : _isInViewCondition = isInViewCondition,
+        _scrollDirection = scrollDirection {
     _contexts = <WidgetData>{};
     _currentInViewIds.addAll(intialIds);
   }
@@ -77,7 +80,8 @@ class InViewState extends ChangeNotifier {
       final double deltaTop = vpOffset.offset - notification.metrics.pixels;
 
       //distance from bottom of the widget to top of the viewport
-      final double deltaBottom = deltaTop + size.height;
+      final double deltaBottom = deltaTop +
+          (_scrollDirection == Axis.vertical ? size.height : size.width);
       bool isInViewport = false;
 
       //Check if the item is in the viewport by evaluating the provided widget's isInViewPortCondition condition.
