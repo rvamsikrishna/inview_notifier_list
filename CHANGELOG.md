@@ -6,12 +6,14 @@
 
 **Features**
 
+- Added `scrollViewWrapper`, an optional callback that wraps the internal `ScrollView` with an additional widget (e.g. `RefreshIndicator`, `EasyRefresh`, `SmartRefresher`, or a shimmer wrapper) while keeping in-view detection working. Available on both `InViewNotifierList` and `InViewNotifierCustomScrollView`.
 - Exposed remaining `ListView.builder` properties: `cacheExtent`, `itemExtent`, `prototypeItem`, `findChildIndexCallback`, `addRepaintBoundaries`, `addSemanticIndexes`, `semanticChildCount`, `dragStartBehavior`, `keyboardDismissBehavior`, `restorationId`, `clipBehavior`. ([#43](https://github.com/rvamsikrishna/inview_notifier_list/issues/43), [#36](https://github.com/rvamsikrishna/inview_notifier_list/issues/36)) — thanks to [@nqhhdev](https://github.com/nqhhdev) for the initial work in [#60](https://github.com/rvamsikrishna/inview_notifier_list/pull/60).
 - Exposed remaining `CustomScrollView` properties: `cacheExtent`, `scrollBehavior`, `semanticChildCount`, `dragStartBehavior`, `keyboardDismissBehavior`, `restorationId`, `clipBehavior`.
 
 **Example App**
 
 - Added horizontal scroll example tab.
+- Added pull-to-refresh example tab demonstrating `scrollViewWrapper` with `RefreshIndicator` and `EasyRefresh`.
 
 ## [4.0.0] - 4th April 2026.
 

@@ -185,6 +185,20 @@ Run the [example](https://github.com/rvamsikrishna/inview_notifier_list/tree/mas
 
 - `scrollDirection`: The axis along which the scroll view scrolls.
 
+- `scrollViewWrapper`: An optional callback that wraps the internal scroll view with an additional widget, such as a pull-to-refresh or shimmer wrapper, while keeping in-view detection working. It receives the fully built scroll view and must return a widget that contains it.
+
+  ```dart
+  InViewNotifierList(
+    scrollViewWrapper: (scrollView) => RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: scrollView,
+    ),
+    // ...
+  )
+  ```
+
+  > Note: The wrapper must let `ScrollNotification` events bubble up from the inner scroll view (most widgets do by default). If the wrapper provides its own `ScrollController`, make sure it does not conflict with the one passed to `InViewNotifierList`.
+
 ##### Credits:
 
 Thanks to [Didier Boelens](https://www.didierboelens.com/) for the raw solution.
