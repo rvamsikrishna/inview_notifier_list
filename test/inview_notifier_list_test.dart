@@ -526,6 +526,48 @@ void main() {
 
       expect(tester.takeException(), isNull);
     });
+
+    testWidgets('in-view detection works through a scrollViewWrapper',
+        (WidgetTester tester) async {
+      final controller = ScrollController();
+      await binding.setSurfaceSize(const Size(500, 800));
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InViewNotifierCustomScrollView(
+            controller: controller,
+            isInViewPortCondition: halfwayCondition,
+            scrollViewWrapper: (scrollView) {
+              // Simulates a refresh widget wrapping the scroll view.
+              return ColoredBox(
+                color: Colors.transparent,
+                child: scrollView,
+              );
+            },
+            slivers: <Widget>[
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) => TestBox(id: '$index', height: 300.0),
+                  childCount: 20,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      // Scroll so that an item crosses the midpoint.
+      controller.jumpTo(600.0);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Detection should work despite the wrapper between the
+      // NotificationListener and the CustomScrollView.
+      expect(
+        find.byWidgetPredicate(
+            (w) => w is Container && w.color == Colors.lightGreen),
+        findsWidgets,
+      );
+    });
   });
 
   group('InViewNotifier - throttleDuration', () {
