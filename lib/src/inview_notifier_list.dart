@@ -64,6 +64,10 @@ class InViewNotifierList extends InViewNotifier {
               itemExtent: itemExtent,
               prototypeItem: prototypeItem,
               findChildIndexCallback: findChildIndexCallback,
+              // cacheExtent is deprecated in newer Flutter in favour of
+              // scrollCacheExtent, which does not exist on this package's
+              // minimum supported Flutter (>=3.10.0), so we keep forwarding it.
+              // ignore: deprecated_member_use
               cacheExtent: cacheExtent,
               semanticChildCount: semanticChildCount,
               dragStartBehavior: dragStartBehavior,
@@ -137,6 +141,8 @@ class InViewNotifierCustomScrollView extends InViewNotifier {
               primary: primary,
               shrinkWrap: shrinkWrap,
               center: center,
+              // cacheExtent kept for Flutter >=3.10.0 compatibility (see note above).
+              // ignore: deprecated_member_use
               cacheExtent: cacheExtent,
               semanticChildCount: semanticChildCount,
               dragStartBehavior: dragStartBehavior,
