@@ -1,3 +1,13 @@
+## [4.1.0] - 3rd July 2026.
+
+**Features**
+
+- Added `scrollViewWrapper`, an optional callback that wraps the internal `ScrollView` with an additional widget (e.g. `RefreshIndicator`, `EasyRefresh`, `SmartRefresher`, or a shimmer wrapper) while keeping in-view detection working. Available on both `InViewNotifierList` and `InViewNotifierCustomScrollView`.
+
+**Example App**
+
+- Added pull-to-refresh example tab demonstrating `scrollViewWrapper` with `RefreshIndicator` and `EasyRefresh`.
+
 ## [4.0.1] - 4th April 2026.
 
 **Fixes**

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'horizontal_list.dart';
 import 'my_list.dart';
+import 'refresh_list.dart';
 import 'video_list.dart';
 
 void main() => runApp(const MyApp());
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     Tab(text: 'Example 1'),
     Tab(text: 'Example 2'),
     Tab(text: 'Horizontal'),
+    Tab(text: 'Pull to Refresh'),
     Tab(text: 'Autoplay Video'),
     Tab(text: 'Custom Scroll View'),
   ];
@@ -74,6 +76,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const HorizontalList(),
+            const RefreshList(),
             const VideoList(),
             CSVExample(),
           ],
